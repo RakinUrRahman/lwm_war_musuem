@@ -548,6 +548,13 @@
           <button class="btn" id="textSizeToggle" style="font-size:12px; padding:6px 10px;">
             <i class="fas fa-text-height"></i> Text Size
           </button>
+            <button class="btn" id="darkModeToggle" style="font-size:12px; padding:6px 10px;">
+              <i class="fas fa-moon"></i> <span id="darkModeLabel">Dark Mode</span>
+            </button>
+            <select id="langSelect" class="btn" style="font-size:12px; padding:6px 10px;">
+              <option value="en">English</option>
+              <option value="bn">বাংলা</option>
+            </select>
         </div>
       </div>
     </aside>
@@ -584,7 +591,72 @@
   </div>
 
   <script>
-  // Enhanced prototype with complete features for Liberation War Museum
+    // Enhanced prototype with complete features for Liberation War Museum
+    // --- Language and Dark Mode ---
+    const LANG = {
+      en: {
+        dark: 'Dark Mode',
+        light: 'Light Mode',
+        accessibility: 'Accessibility',
+        options: 'Options for better viewing experience',
+        highContrast: 'High Contrast',
+        textSize: 'Text Size',
+        language: 'Language',
+        outreach: 'Outreach & Connect',
+        news: 'News • Programs • Social Media',
+        demoRole: 'Demo Role Selection',
+        visitor: 'Public Visitor',
+        login: 'Login / Register',
+        logout: 'Logout',
+        // ...add more as needed
+      },
+      bn: {
+        dark: 'ডার্ক মোড',
+        light: 'লাইট মোড',
+        accessibility: 'প্রবেশযোগ্যতা',
+        options: 'ভিউয়িং অভিজ্ঞতার জন্য অপশন',
+        highContrast: 'উচ্চ কনট্রাস্ট',
+        textSize: 'টেক্সট সাইজ',
+        language: 'ভাষা',
+        outreach: 'আউটরিচ ও সংযোগ',
+        news: 'সংবাদ • প্রোগ্রাম • সোশ্যাল মিডিয়া',
+        demoRole: 'ডেমো রোল নির্বাচন',
+        visitor: 'সাধারণ দর্শক',
+        login: 'লগইন / রেজিস্টার',
+        logout: 'লগআউট',
+        // ...add more as needed
+      }
+    }
+    let currentLang = localStorage.getItem('lwm_lang') || 'en';
+    function setLang(lang) {
+      currentLang = lang;
+      localStorage.setItem('lwm_lang', lang);
+      updateLangUI();
+    }
+    function updateLangUI() {
+      // Example: update sidebar accessibility section
+      document.querySelector('aside.side h4 i.fas.fa-universal-access').nextSibling.textContent = ' ' + LANG[currentLang].accessibility;
+      document.querySelector('aside.side h4 + div').textContent = LANG[currentLang].options;
+      document.getElementById('darkModeLabel').textContent = document.body.classList.contains('dark-mode') ? LANG[currentLang].light : LANG[currentLang].dark;
+      // Update language select
+      document.getElementById('langSelect').value = currentLang;
+      // Update Outreach
+      document.querySelector('aside.side h4 i.fas.fa-handshake').nextSibling.textContent = ' ' + LANG[currentLang].outreach;
+      document.querySelector('aside.side h4 i.fas.fa-handshake').parentElement.nextElementSibling.textContent = LANG[currentLang].news;
+      // Demo role
+      let nav = document.getElementById('nav');
+      let demoRole = nav.querySelector('.muted');
+      if (demoRole) demoRole.textContent = LANG[currentLang].demoRole;
+      // User status
+      let userStatus = document.getElementById('userStatus');
+      if (!state.user && userStatus) userStatus.textContent = LANG[currentLang].visitor;
+      // ...add more as needed
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('langSelect').addEventListener('change', e => setLang(e.target.value));
+      updateLangUI();
+    });
+    // --- End Language ---
   const state = {
     user: JSON.parse(localStorage.getItem('lwm_user') || 'null'),
     artifacts: generateArtifacts(24),
@@ -2108,14 +2180,40 @@
     document.body.classList.toggle('high-contrast')
   })
 
-  byId('textSizeToggle').addEventListener('click', () => {
-    alert('Text size options would appear here')
-  })
+
+    byId('textSizeToggle').addEventListener('click', () => {
+      alert(currentLang === 'bn' ? 'টেক্সট সাইজ অপশন এখানে আসবে' : 'Text size options would appear here')
+    })
+
+    // Dark mode toggle
+    byId('darkModeToggle').addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      // Update label
+      document.getElementById('darkModeLabel').textContent = document.body.classList.contains('dark-mode') ? LANG[currentLang].light : LANG[currentLang].dark;
+      localStorage.setItem('lwm_dark', document.body.classList.contains('dark-mode') ? '1' : '0');
+    });
+
+    // On load, restore dark mode
+    if (localStorage.getItem('lwm_dark') === '1') {
+      document.body.classList.add('dark-mode');
+    }
 
   // Initial render
   renderMenu()
   updateUserUI()
   renderRoute()
+
+    // Language and dark mode on load
+    setTimeout(() => {
+      if (document.getElementById('langSelect')) {
+        document.getElementById('langSelect').value = currentLang;
+        updateLangUI();
+      }
+      if (localStorage.getItem('lwm_dark') === '1') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('darkModeLabel').textContent = LANG[currentLang].light;
+      }
+    }, 100);
 
   // Make functions available globally for demo purposes
   window._LWM = { state, navigate, setRole, toggleFav }
