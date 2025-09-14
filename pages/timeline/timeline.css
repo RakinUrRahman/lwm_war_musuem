@@ -1,0 +1,624 @@
+/* Timeline Page Specific Styles */
+
+.page-header {
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(0, 106, 78, 0.1);
+}
+
+.page-header h2 {
+  color: var(--bangladesh-green);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.page-header h2 i {
+  color: var(--bangladesh-green);
+}
+
+.page-header .lead {
+  font-size: 1.1rem;
+  color: var(--muted);
+  margin-bottom: 0;
+}
+
+/* Section Titles */
+.section-title {
+  color: var(--bangladesh-green);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-left: 20px;
+}
+
+.section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 25px;
+  background: var(--bangladesh-green);
+  border-radius: 2px;
+}
+
+/* Timeline Controls */
+.timeline-controls {
+  background: rgba(0, 106, 78, 0.05);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  margin-bottom: 2rem;
+}
+
+.timeline-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.timeline-filters .btn {
+  border: 2px solid var(--bangladesh-green);
+  color: var(--bangladesh-green);
+  background: transparent;
+  transition: var(--transition);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 0.9rem;
+}
+
+.timeline-filters .btn:hover,
+.timeline-filters .btn.active {
+  background: var(--bangladesh-green);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 106, 78, 0.3);
+}
+
+.timeline-view-options {
+  text-align: right;
+}
+
+.timeline-view-options label {
+  color: var(--bangladesh-green);
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+/* Timeline Container */
+.timeline-container {
+  position: relative;
+  margin: 2rem 0;
+}
+
+/* Vertical Timeline */
+.timeline-vertical {
+  position: relative;
+}
+
+.timeline-vertical::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, var(--bangladesh-green), var(--bangladesh-red));
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.timeline-event {
+  position: relative;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: slideInTimeline 0.8s ease-out forwards;
+}
+
+.timeline-event:nth-child(even) {
+  animation-delay: 0.2s;
+}
+
+.timeline-event:nth-child(odd) {
+  animation-delay: 0.1s;
+}
+
+/* Timeline Event Positioning */
+.timeline-event:nth-child(odd) .event-content {
+  margin-left: calc(50% + 40px);
+  text-align: left;
+}
+
+.timeline-event:nth-child(even) .event-content {
+  margin-right: calc(50% + 40px);
+  text-align: right;
+}
+
+.timeline-event:nth-child(odd) .event-marker {
+  left: calc(50% - 15px);
+}
+
+.timeline-event:nth-child(even) .event-marker {
+  left: calc(50% - 15px);
+}
+
+/* Event Marker */
+.event-marker {
+  position: absolute;
+  top: 20px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 4px solid white;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.event-marker:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.event-marker.political {
+  background: var(--bangladesh-green);
+}
+
+.event-marker.military {
+  background: var(--bangladesh-red);
+}
+
+.event-marker.international {
+  background: #007bff;
+}
+
+.event-marker.social {
+  background: #ffc107;
+  color: #000;
+}
+
+/* Event Content */
+.event-content {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  cursor: pointer;
+  border-left: 4px solid;
+  position: relative;
+}
+
+.event-content:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.event-content.political {
+  border-left-color: var(--bangladesh-green);
+}
+
+.event-content.military {
+  border-left-color: var(--bangladesh-red);
+}
+
+.event-content.international {
+  border-left-color: #007bff;
+}
+
+.event-content.social {
+  border-left-color: #ffc107;
+}
+
+.event-date {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.event-type {
+  background: rgba(0, 106, 78, 0.1);
+  color: var(--bangladesh-green);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.event-title {
+  color: var(--bangladesh-green);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.event-description {
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.event-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 106, 78, 0.1);
+}
+
+.event-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.event-casualties {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--bangladesh-red);
+}
+
+/* Horizontal Timeline */
+.timeline-horizontal {
+  display: flex;
+  overflow-x: auto;
+  padding: 2rem 0;
+  gap: 2rem;
+  scroll-behavior: smooth;
+}
+
+.timeline-horizontal .timeline-event {
+  min-width: 300px;
+  flex-shrink: 0;
+}
+
+.timeline-horizontal .event-content {
+  margin: 0;
+  text-align: left;
+}
+
+.timeline-horizontal .event-marker {
+  position: static;
+  margin: 0 auto 1rem auto;
+}
+
+.timeline-horizontal::before {
+  display: none;
+}
+
+/* Timeline Navigation */
+.timeline-progress {
+  margin-bottom: 1rem;
+}
+
+.timeline-progress label {
+  color: var(--bangladesh-green);
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.timeline-progress .progress {
+  height: 8px;
+  background: rgba(0, 106, 78, 0.1);
+}
+
+.timeline-progress .progress-bar {
+  background: linear-gradient(to right, var(--bangladesh-green), var(--bangladesh-red));
+  transition: width 0.3s ease;
+}
+
+.timeline-jump label {
+  color: var(--bangladesh-green);
+  font-weight: 500;
+}
+
+.timeline-jump .form-select:focus {
+  border-color: var(--bangladesh-green);
+  box-shadow: 0 0 0 0.2rem rgba(0, 106, 78, 0.25);
+}
+
+/* Statistics Cards */
+.timeline-stats {
+  background: linear-gradient(135deg, rgba(0, 106, 78, 0.05), rgba(220, 53, 69, 0.05));
+  padding: 2rem;
+  border-radius: var(--radius);
+  margin: 3rem 0;
+}
+
+.stat-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  height: 100%;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+  font-size: 2rem;
+  color: var(--bangladesh-green);
+  margin-bottom: 1rem;
+}
+
+.stat-content h4 {
+  color: var(--bangladesh-green);
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-content p {
+  color: var(--muted);
+  margin-bottom: 0;
+  font-weight: 500;
+}
+
+/* Interactive Map Section */
+.timeline-map-section {
+  background: white;
+  border: 2px solid rgba(0, 106, 78, 0.1);
+  border-radius: var(--radius);
+  padding: 2rem;
+}
+
+.map-container {
+  background: #f8f9fa;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.war-map {
+  height: 300px;
+  position: relative;
+}
+
+.map-placeholder {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  text-align: center;
+  padding: 2rem;
+}
+
+.map-placeholder i {
+  color: var(--bangladesh-green);
+  margin-bottom: 1rem;
+}
+
+.map-placeholder p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+/* Event Modal */
+.event-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.event-modal.active {
+  display: flex;
+}
+
+.event-modal-content {
+  background: var(--card);
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+.event-modal-header {
+  position: sticky;
+  top: 0;
+  background: var(--card);
+  padding: 20px;
+  border-bottom: 1px solid rgba(0, 106, 78, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.event-modal-body {
+  padding: 20px;
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 8px;
+  border-radius: 4px;
+  transition: var(--transition);
+}
+
+.close-modal:hover {
+  background: rgba(0, 106, 78, 0.1);
+  color: var(--bangladesh-green);
+}
+
+/* Event Detail Content */
+.event-detail-image {
+  width: 100%;
+  height: 250px;
+  background-size: cover;
+  background-position: center;
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+}
+
+.event-detail-meta {
+  background: rgba(0, 106, 78, 0.05);
+  padding: 20px;
+  border-radius: var(--radius);
+  margin: 20px 0;
+}
+
+.event-detail-meta .row > div {
+  margin-bottom: 10px;
+}
+
+.event-detail-meta strong {
+  color: var(--bangladesh-green);
+}
+
+.event-participants {
+  margin: 20px 0;
+}
+
+.participant-card {
+  background: white;
+  border: 1px solid rgba(0, 106, 78, 0.1);
+  border-radius: var(--radius);
+  padding: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.participant-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bangladesh-green);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.participant-info h6 {
+  margin-bottom: 2px;
+  color: var(--bangladesh-green);
+}
+
+.participant-info small {
+  color: var(--muted);
+}
+
+/* Animations */
+@keyframes slideInTimeline {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.timeline-event:nth-child(even) {
+  animation-name: slideInTimelineRight;
+}
+
+@keyframes slideInTimelineRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .timeline-controls {
+    padding: 1rem;
+  }
+  
+  .timeline-filters {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .timeline-filters .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .timeline-view-options {
+    text-align: left;
+    margin-top: 1rem;
+  }
+  
+  /* Mobile Timeline */
+  .timeline-vertical::before {
+    left: 20px;
+  }
+  
+  .timeline-event:nth-child(odd) .event-content,
+  .timeline-event:nth-child(even) .event-content {
+    margin-left: 50px;
+    margin-right: 0;
+    text-align: left;
+  }
+  
+  .timeline-event:nth-child(odd) .event-marker,
+  .timeline-event:nth-child(even) .event-marker {
+    left: 5px;
+  }
+  
+  .timeline-horizontal {
+    padding: 1rem 0;
+  }
+  
+  .timeline-horizontal .timeline-event {
+    min-width: 250px;
+  }
+  
+  .stat-card {
+    margin-bottom: 1rem;
+  }
+  
+  .event-modal-content {
+    margin: 10px;
+    max-height: calc(100vh - 20px);
+  }
+  
+  .event-detail-image {
+    height: 200px;
+  }
+}

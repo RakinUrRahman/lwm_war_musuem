@@ -1,0 +1,96 @@
+/* Home Page Specific Styles */
+
+.hero-content h2 {
+  color: var(--bangladesh-green);
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.stats {
+  animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+.stat {
+  transition: var(--transition);
+}
+
+.stat:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 15px 30px rgba(0, 106, 78, 0.2);
+}
+
+.hero-image img {
+  transition: var(--transition);
+  border-radius: var(--radius);
+}
+
+.hero-image:hover img {
+  transform: scale(1.02);
+}
+
+.section-title {
+  position: relative;
+  overflow: hidden;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--bangladesh-green), transparent);
+  animation: slideIn 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Featured content animations */
+.grid {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.card {
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 106, 78, 0.15);
+}
+
+/* Responsive adjustments for home page */
+@media (max-width: 768px) {
+  .hero-content h2 {
+    font-size: 2rem;
+  }
+  
+  .stats {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .stat {
+    min-width: auto;
+    width: 100%;
+  }
+}

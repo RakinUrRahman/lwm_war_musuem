@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Explore — Digital Liberation War Museum</title>
+    
+		<!-- Bootstrap CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+		<!-- Fonts & Main CSS -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap">
+		<link rel="stylesheet" href="../../assets/css/lwm.css">
+		<!-- Explore Page CSS -->
+		<link rel="stylesheet" href="explore.css">
+</head>
+<body>
+	<div class="app" id="app">
+		<aside class="side" id="side">
+			<div class="brand">
+				<div class="logo">LWM</div>
+				<div>
+					<h1 style="font-size:20px">Digital Liberation War Museum</h1>
+					<div class="muted" style="font-size:13px">Honoring Bangladesh's History</div>
+				</div>
+			</div>
+
+			<nav role="navigation" aria-label="Main menu" id="nav"></nav>
+
+			<div style="margin-top:28px">
+				<h4 style="margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+					<i class="fas fa-handshake"></i> Outreach & Connect
+				</h4>
+				<div class="muted" style="font-size:13px; margin-bottom:12px;">News • Programs • Social Media</div>
+				<div style="display:flex;gap:10px;margin-top:12px">
+					<a href="#" aria-label="YouTube" class="btn" style="padding:8px 12px;"><i class="fab fa-youtube"></i></a>
+					<a href="#" aria-label="Facebook" class="btn" style="padding:8px 12px;"><i class="fab fa-facebook-f"></i></a>
+					<a href="#" aria-label="Instagram" class="btn" style="padding:8px 12px;"><i class="fab fa-instagram"></i></a>
+				</div>
+			</div>
+
+			<div style="margin-top:28px" class="muted">
+				<h4 style="margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+					<i class="fas fa-universal-access"></i> Accessibility
+				</h4>
+				<div style="font-size:13px">Options for better viewing experience</div>
+				<div style="display:flex;gap:8px;margin-top:12px">
+					<button class="btn" id="contrastToggle" style="font-size:12px; padding:6px 10px;">
+						<i class="fas fa-adjust"></i> High Contrast
+					</button>
+					<button class="btn" id="textSizeToggle" style="font-size:12px; padding:6px 10px;">
+						<i class="fas fa-text-height"></i> Text Size
+					</button>
+					<button class="btn" id="darkModeToggle" style="font-size:12px; padding:6px 10px;">
+						<i class="fas fa-moon"></i> <span id="darkModeLabel">Dark Mode</span>
+					</button>
+					<select id="langSelect" class="btn" style="font-size:12px; padding:6px 10px;">
+						<option value="en">English</option>
+						<option value="bn">বাংলা</option>
+					</select>
+				</div>
+			</div>
+		</aside>
+
+		<div class="overlay" id="overlay"></div>
+
+		<main class="main">
+			<div class="topbar">
+				<div style="display:flex;align-items:center;gap:12px">
+					<button class="btn" id="hamb" aria-label="Toggle menu">
+						<i class="fas fa-bars"></i>
+					</button>
+					<div class="search" role="search">
+						<i class="fas fa-search" aria-hidden="true"></i>
+						<input id="globalSearch" placeholder="Search artifacts, stories, memorials..." aria-label="Search"/>
+						<button class="btn" id="searchBtn" aria-label="Search button">Search</button>
+					</div>
+				</div>
+
+				<div style="display:flex;align-items:center;gap:12px">
+					<div id="userStatus" class="muted">Public Visitor</div>
+					<div style="width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:white;font-weight:600">
+						<span id="userInitials">PV</span>
+					</div>
+				</div>
+			</div>
+
+			<section class="content" id="page">
+				<div>
+					<div class="container">
+			<!-- Page Header -->
+			<div class="page-header">
+				<h2><i class="fas fa-compass"></i> Explore the Museum</h2>
+				<p class="lead">Discover our galleries, exhibitions, and interactive experiences that bring the Liberation War history to life.</p>
+			</div>
+
+			<!-- Interactive Museum Map -->
+			<section class="museum-map-section mb-5">
+				<h3 class="section-title">Interactive Museum Map</h3>
+				<div class="museum-map-container">
+					<div class="museum-map" id="museumMap">
+						<!-- Floor Plans -->
+						<div class="floor-selector">
+							<button class="floor-btn active" data-floor="ground">Ground Floor</button>
+							<button class="floor-btn" data-floor="first">First Floor</button>
+							<button class="floor-btn" data-floor="second">Second Floor</button>
+						</div>
+                        
+						<!-- Map Areas -->
+						<div class="map-container" id="mapContainer">
+							<!-- Interactive areas will be populated by JS -->
+						</div>
+                        
+						<!-- Legend -->
+						<div class="map-legend">
+							<h5>Legend</h5>
+							<div class="legend-item">
+								<span class="legend-color exhibition"></span>
+								<span>Exhibition Halls</span>
+							</div>
+							<div class="legend-item">
+								<span class="legend-color interactive"></span>
+								<span>Interactive Zones</span>
+							</div>
+							<div class="legend-item">
+								<span class="legend-color facility"></span>
+								<span>Facilities</span>
+							</div>
+							<div class="legend-item">
+								<span class="legend-color restricted"></span>
+								<span>Staff Areas</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Gallery Highlights -->
+			<section class="gallery-highlights mb-5">
+				<h3 class="section-title">Gallery Highlights</h3>
+				<div class="row" id="galleryHighlights">
+					<!-- Gallery cards will be populated by JS -->
+				</div>
+			</section>
+
+			<!-- Virtual Exploration Tools -->
+			<section class="virtual-tools mb-5">
+				<h3 class="section-title">Virtual Exploration</h3>
+				<div class="row">
+					<div class="col-md-4 mb-4">
+						<div class="tool-card">
+							<div class="tool-icon">
+								<i class="fas fa-vr-cardboard"></i>
+							</div>
+							<h4>360° Virtual Tour</h4>
+							<p>Take a complete virtual tour of the museum from the comfort of your home.</p>
+							<button class="btn btn-primary" onclick="navigate('virtual-tour')">
+								Start Tour <i class="fas fa-arrow-right ms-2"></i>
+							</button>
+						</div>
+					</div>
+					<div class="col-md-4 mb-4">
+						<div class="tool-card">
+							<div class="tool-icon">
+								<i class="fas fa-mobile-alt"></i>
+							</div>
+							<h4>AR Experience</h4>
+							<p>Use your smartphone to unlock augmented reality features throughout the museum.</p>
+							<button class="btn btn-outline-primary" onclick="showARInfo()">
+								Learn More <i class="fas fa-info-circle ms-2"></i>
+							</button>
+						</div>
+					</div>
+					<div class="col-md-4 mb-4">
+						<div class="tool-card">
+							<div class="tool-icon">
+								<i class="fas fa-headphones"></i>
+							</div>
+							<h4>Audio Guide</h4>
+							<p>Listen to detailed narrations and stories as you explore each exhibition.</p>
+							<button class="btn btn-outline-primary" onclick="showAudioGuide()">
+								Get Audio Guide <i class="fas fa-download ms-2"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Collection Highlights -->
+			<section class="collection-highlights mb-5">
+				<h3 class="section-title">Featured Collections</h3>
+				<div class="collection-filters mb-4">
+					<button class="btn btn-outline-primary active" data-collection="all">All Collections</button>
+					<button class="btn btn-outline-primary" data-collection="artifacts">Artifacts</button>
+					<button class="btn btn-outline-primary" data-collection="documents">Documents</button>
+					<button class="btn btn-outline-primary" data-collection="photographs">Photographs</button>
+					<button class="btn btn-outline-primary" data-collection="weapons">Weapons</button>
+					<button class="btn btn-outline-primary" data-collection="uniforms">Uniforms</button>
+				</div>
+				<div class="row" id="collectionsGrid">
+					<!-- Collection items will be populated by JS -->
+				</div>
+			</section>
+
+			<!-- Visit Information -->
+			<section class="visit-info">
+				<h3 class="section-title">Plan Your Visit</h3>
+				<div class="row">
+					<div class="col-md-6 mb-4">
+						<div class="info-card">
+							<h4><i class="fas fa-clock text-primary me-2"></i>Opening Hours</h4>
+							<div class="hours-list">
+								<div class="hour-item">
+									<span>Sunday - Thursday</span>
+									<span>9:00 AM - 5:00 PM</span>
+								</div>
+								<div class="hour-item">
+									<span>Friday</span>
+									<span>9:00 AM - 12:00 PM, 2:00 PM - 5:00 PM</span>
+								</div>
+								<div class="hour-item">
+									<span>Saturday</span>
+									<span>9:00 AM - 6:00 PM</span>
+								</div>
+								<div class="hour-item holiday">
+									<span>National Holidays</span>
+									<span>Closed</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 mb-4">
+						<div class="info-card">
+							<h4><i class="fas fa-ticket-alt text-primary me-2"></i>Ticket Prices</h4>
+							<div class="price-list">
+								<div class="price-item">
+									<span>Adults</span>
+									<span class="price">৳50</span>
+								</div>
+								<div class="price-item">
+									<span>Students (with ID)</span>
+									<span class="price">৳20</span>
+								</div>
+								<div class="price-item">
+									<span>Children (under 12)</span>
+									<span class="price">৳10</span>
+								</div>
+								<div class="price-item">
+									<span>Senior Citizens (60+)</span>
+									<span class="price">৳25</span>
+								</div>
+								<div class="price-item special">
+									<span>Group Tours (10+)</span>
+									<span class="price">৳30/person</span>
+								</div>
+							</div>
+							<button class="btn btn-primary mt-3" onclick="navigate('ticket')">
+								Book Tickets <i class="fas fa-arrow-right ms-2"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<footer>
+				© <strong>Digital Liberation War Museum</strong> — Honoring the Sacrifices of 1971 • Prototype v2.0
+			</footer>
+		</main>
+	</div>
+
+	<!-- Area Detail Modal -->
+	<div class="area-modal" id="areaModal">
+		<div class="area-modal-content">
+			<div class="area-modal-header">
+				<h3 id="modalAreaTitle"></h3>
+				<button class="close-modal" onclick="closeAreaModal()">
+					<i class="fas fa-times"></i>
+				</button>
+			</div>
+			<div class="area-modal-body" id="modalAreaContent">
+				<!-- Area details will be populated by JS -->
+			</div>
+		</div>
+	</div>
+
+	<!-- Collection Item Modal -->
+	<div class="collection-modal" id="collectionModal">
+		<div class="collection-modal-content">
+			<div class="collection-modal-header">
+				<h3 id="modalCollectionTitle"></h3>
+				<button class="close-modal" onclick="closeCollectionModal()">
+					<i class="fas fa-times"></i>
+				</button>
+			</div>
+			<div class="collection-modal-body" id="modalCollectionContent">
+				<!-- Collection details will be populated by JS -->
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- Core JS -->
+	<script src="../../shared/core.js"></script>
+	<!-- Explore JS -->
+	<script src="explore.js"></script>
+</body>
+</html>

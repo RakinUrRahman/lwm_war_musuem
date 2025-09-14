@@ -1,0 +1,3 @@
+/* Minimal styles for Stories page */
+#storiesContainer .card { border: 1px solid var(--border); border-radius: 10px; padding: 12px; background: var(--card-bg, #fff); }
+#storiesContainer .card h5 { margin-bottom: 6px; }

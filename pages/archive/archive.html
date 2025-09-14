@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Digital Archive — Digital Liberation War Museum</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap">
+	<link rel="stylesheet" href="../../assets/css/lwm.css">
+	<link rel="stylesheet" href="archive.css">
+</head>
+<body>
+	<div class="app" id="app">
+		<aside class="side" id="side">
+			<div class="brand">
+				<div class="logo">LWM</div>
+				<div>
+					<h1 style="font-size:20px">Digital Liberation War Museum</h1>
+					<div class="muted" style="font-size:13px">Honoring Bangladesh's History</div>
+				</div>
+			</div>
+
+			<nav role="navigation" aria-label="Main menu" id="nav"></nav>
+
+			<div style="margin-top:28px">
+				<h4 style="margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+					<i class="fas fa-handshake"></i> Outreach & Connect
+				</h4>
+				<div class="muted" style="font-size:13px; margin-bottom:12px;">News • Programs • Social Media</div>
+				<div style="display:flex;gap:10px;margin-top:12px">
+					<a href="#" aria-label="YouTube" class="btn" style="padding:8px 12px;"><i class="fab fa-youtube"></i></a>
+					<a href="#" aria-label="Facebook" class="btn" style="padding:8px 12px;"><i class="fab fa-facebook-f"></i></a>
+					<a href="#" aria-label="Instagram" class="btn" style="padding:8px 12px;"><i class="fab fa-instagram"></i></a>
+				</div>
+			</div>
+
+			<div style="margin-top:28px" class="muted">
+				<h4 style="margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+					<i class="fas fa-universal-access"></i> Accessibility
+				</h4>
+				<div style="font-size:13px">Options for better viewing experience</div>
+				<div style="display:flex;gap:8px;margin-top:12px">
+					<button class="btn" id="contrastToggle" style="font-size:12px; padding:6px 10px;">
+						<i class="fas fa-adjust"></i> High Contrast
+					</button>
+					<button class="btn" id="textSizeToggle" style="font-size:12px; padding:6px 10px;">
+						<i class="fas fa-text-height"></i> Text Size
+					</button>
+					<button class="btn" id="darkModeToggle" style="font-size:12px; padding:6px 10px;">
+						<i class="fas fa-moon"></i> <span id="darkModeLabel">Dark Mode</span>
+					</button>
+					<select id="langSelect" class="btn" style="font-size:12px; padding:6px 10px;">
+						<option value="en">English</option>
+						<option value="bn">বাংলা</option>
+					</select>
+				</div>
+			</div>
+		</aside>
+
+		<div class="overlay" id="overlay"></div>
+
+		<main class="main">
+			<div class="topbar">
+				<div style="display:flex;align-items:center;gap:12px">
+					<button class="btn" id="hamb" aria-label="Toggle menu">
+						<i class="fas fa-bars"></i>
+					</button>
+					<div class="search" role="search">
+						<i class="fas fa-search" aria-hidden="true"></i>
+						<input id="globalSearch" placeholder="Search artifacts, stories, memorials..." aria-label="Search"/>
+						<button class="btn" id="searchBtn" aria-label="Search button">Search</button>
+					</div>
+				</div>
+
+				<div style="display:flex;align-items:center;gap:12px">
+					<div id="userStatus" class="muted">Public Visitor</div>
+					<div style="width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:white;font-weight:600">
+						<span id="userInitials">PV</span>
+					</div>
+				</div>
+			</div>
+
+			<section class="content" id="page">
+				<div>
+					<!-- Archive Hero Section -->
+					<section class="archive-hero py-5">
+						<div class="container">
+							<div class="row align-items-center">
+								<div class="col-lg-8">
+									<h1 class="display-4 fw-bold text-white mb-3" data-translate="archive_title">
+										Digital Archive
+									</h1>
+									<p class="lead text-white-75 mb-4" data-translate="archive_subtitle">
+										Explore our comprehensive collection of historical documents, photographs, and records from Bangladesh's Liberation War
+									</p>
+									<div class="archive-stats d-flex flex-wrap gap-4">
+										<div class="stat-item">
+											<h3 class="h5 mb-1" id="documentsCount">0</h3>
+											<small data-translate="documents">Documents</small>
+										</div>
+										<div class="stat-item">
+											<h3 class="h5 mb-1" id="photographsCount">0</h3>
+											<small data-translate="photographs">Photographs</small>
+										</div>
+										<div class="stat-item">
+											<h3 class="h5 mb-1" id="recordsCount">0</h3>
+											<small data-translate="records">Records</small>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-4 text-center">
+									<div class="archive-hero-icon">
+										<i class="fas fa-archive fa-6x text-white opacity-75"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+
+					<!-- Archive Search & Filters -->
+					<section class="archive-search py-4 bg-light">
+						<div class="container">
+							<div class="row">
+								<div class="col-lg-6">
+									<div class="search-box">
+										<div class="input-group">
+											<input type="text" class="form-control" id="archiveSearch" placeholder="Search archives...">
+											<button class="btn btn-primary" type="button" id="searchBtn">
+												<i class="fas fa-search"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6">
+									<div class="d-flex gap-3">
+										<select class="form-select" id="categoryFilter">
+											<option value="all">All Categories</option>
+											<option value="documents">Official Documents</option>
+											<option value="photographs">Photographs</option>
+											<option value="letters">Personal Letters</option>
+											<option value="newspapers">Newspapers</option>
+											<option value="maps">Maps & Plans</option>
+											<option value="recordings">Audio Recordings</option>
+										</select>
+										<select class="form-select" id="yearFilter">
+											<option value="all">All Years</option>
+											<option value="1971">1971</option>
+											<option value="1970">1970</option>
+											<option value="1969">1969</option>
+											<option value="1952">1952</option>
+										</select>
+										<button class="btn btn-outline-secondary" id="advancedSearchBtn">
+											<i class="fas fa-sliders-h"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+
+					<!-- Archive Collections -->
+					<section class="archive-collections py-5">
+						<div class="container">
+							<div class="row">
+								<!-- Main Archive Content -->
+								<div class="col-lg-9">
+									<!-- Collection Tabs -->
+									<ul class="nav nav-tabs mb-4" id="collectionTabs" role="tablist">
+										<li class="nav-item" role="presentation">
+											<button class="nav-link active" id="featured-tab" data-bs-toggle="tab" data-bs-target="#featured" type="button" role="tab">
+												<i class="fas fa-star me-2"></i>Featured Collections
+											</button>
+										</li>
+										<li class="nav-item" role="presentation">
+											<button class="nav-link" id="documents-tab" data-bs-toggle="tab" data-bs-target="#documents" type="button" role="tab">
+												<i class="fas fa-file-alt me-2"></i>Documents
+											</button>
+										</li>
+										<li class="nav-item" role="presentation">
+											<button class="nav-link" id="photos-tab" data-bs-toggle="tab" data-bs-target="#photos" type="button" role="tab">
+												<i class="fas fa-images me-2"></i>Photographs
+											</button>
+										</li>
+										<li class="nav-item" role="presentation">
+											<button class="nav-link" id="records-tab" data-bs-toggle="tab" data-bs-target="#records" type="button" role="tab">
+												<i class="fas fa-folder-open me-2"></i>Records
+											</button>
+										</li>
+									</ul>
+
+									<!-- Tab Content -->
+									<div class="tab-content" id="collectionTabContent">
+										<!-- Featured Collections -->
+										<div class="tab-pane fade show active" id="featured" role="tabpanel">
+											<div id="featuredCollections" class="archive-grid">
+												<!-- Featured collections will be populated by JavaScript -->
+											</div>
+										</div>
+
+										<!-- Documents -->
+										<div class="tab-pane fade" id="documents" role="tabpanel">
+											<div class="archive-results mb-3">
+												<div class="d-flex justify-content-between align-items-center">
+													<span class="text-muted" id="documentsResults">Loading documents...</span>
+													<div class="view-controls">
+														<div class="btn-group btn-group-sm" role="group">
+															<button type="button" class="btn btn-outline-secondary active" data-view="grid">
+																<i class="fas fa-th"></i>
+															</button>
+															<button type="button" class="btn btn-outline-secondary" data-view="list">
+																<i class="fas fa-list"></i>
+															</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div id="documentsGrid" class="archive-grid">
+												<!-- Documents will be populated by JavaScript -->
+											</div>
+										</div>
+
+										<!-- Photographs -->
+										<div class="tab-pane fade" id="photos" role="tabpanel">
+											<div class="archive-results mb-3">
+												<div class="d-flex justify-content-between align-items-center">
+													<span class="text-muted" id="photosResults">Loading photographs...</span>
+													<div class="view-controls">
+														<div class="btn-group btn-group-sm" role="group">
+															<button type="button" class="btn btn-outline-secondary active" data-view="grid">
+																<i class="fas fa-th"></i>
+															</button>
+															<button type="button" class="btn btn-outline-secondary" data-view="list">
+																<i class="fas fa-list"></i>
+															</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div id="photosGrid" class="archive-grid">
+												<!-- Photographs will be populated by JavaScript -->
+											</div>
+										</div>
+
+										<!-- Records -->
+										<div class="tab-pane fade" id="records" role="tabpanel">
+											<div class="archive-results mb-3">
+												<div class="d-flex justify-content-between align-items-center">
+													<span class="text-muted" id="recordsResults">Loading records...</span>
+													<div class="view-controls">
+														<div class="btn-group btn-group-sm" role="group">
+															<button type="button" class="btn btn-outline-secondary active" data-view="grid">
+																<i class="fas fa-th"></i>
+															</button>
+															<button type="button" class="btn btn-outline-secondary" data-view="list">
+																<i class="fas fa-list"></i>
+															</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div id="recordsGrid" class="archive-grid">
+												<!-- Records will be populated by JavaScript -->
+											</div>
+										</div>
+									</div>
+
+									<!-- Pagination -->
+									<nav aria-label="Archive pagination" class="mt-5">
+										<ul class="pagination justify-content-center" id="archivePagination">
+											<!-- Pagination will be populated by JavaScript -->
+										</ul>
+									</nav>
+								</div>
+
+								<!-- Sidebar -->
+								<div class="col-lg-3">
+									<div class="archive-sidebar">
+										<!-- Quick Access -->
+										<div class="sidebar-section">
+											<h5 class="sidebar-title">Quick Access</h5>
+											<div class="quick-access-list">
+												<a href="#" class="quick-access-item" onclick="quickSearch('operation searchlight')">
+													<i class="fas fa-bolt"></i>
+													<span>Operation Searchlight</span>
+												</a>
+												<a href="#" class="quick-access-item" onclick="quickSearch('victory documents')">
+													<i class="fas fa-trophy"></i>
+													<span>Victory Documents</span>
+												</a>
+												<a href="#" class="quick-access-item" onclick="quickSearch('freedom fighters')">
+													<i class="fas fa-users"></i>
+													<span>Freedom Fighters</span>
+												</a>
+												<a href="#" class="quick-access-item" onclick="quickSearch('international support')">
+													<i class="fas fa-globe"></i>
+													<span>International Support</span>
+												</a>
+											</div>
+										</div>
+
+										<!-- Recent Additions -->
+										<div class="sidebar-section">
+											<h5 class="sidebar-title">Recent Additions</h5>
+											<div id="recentAdditions">
+												<!-- Recent additions will be populated by JavaScript -->
+											</div>
+										</div>
+
+										<!-- Popular Archives -->
+										<div class="sidebar-section">
+											<h5 class="sidebar-title">Popular Archives</h5>
+											<div id="popularArchives">
+												<!-- Popular archives will be populated by JavaScript -->
+											</div>
+										</div>
+
+										<!-- Research Tools -->
+										<div class="sidebar-section">
+											<h5 class="sidebar-title">Research Tools</h5>
+											<div class="research-tools">
+												<button class="btn btn-outline-primary btn-sm w-100 mb-2" onclick="showCitationTool()">
+													<i class="fas fa-quote-right me-2"></i>Citation Generator
+												</button>
+												<button class="btn btn-outline-secondary btn-sm w-100 mb-2" onclick="showResearchGuide()">
+													<i class="fas fa-compass me-2"></i>Research Guide
+												</button>
+												<button class="btn btn-outline-success btn-sm w-100 mb-2" onclick="exportSearchResults()">
+													<i class="fas fa-download me-2"></i>Export Results
+												</button>
+												<button class="btn btn-outline-info btn-sm w-100" onclick="requestDocument()">
+													<i class="fas fa-envelope me-2"></i>Request Document
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</section>
+
+			<footer>
+				© <strong>Digital Liberation War Museum</strong> — Honoring the Sacrifices of 1971 • Prototype v2.0
+			</footer>
+		</main>
+	</div>
+
+	<!-- Archive Item Modal -->
+	<div class="modal fade" id="archiveModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="archiveModalTitle">Archive Item</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body" id="archiveModalBody"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-outline-primary" id="downloadArchiveBtn">
+						<i class="fas fa-download me-1"></i>Download
+					</button>
+					<button type="button" class="btn btn-outline-secondary" id="shareArchiveBtn">
+						<i class="fas fa-share me-1"></i>Share
+					</button>
+					<button type="button" class="btn btn-outline-success" id="citeArchiveBtn">
+						<i class="fas fa-quote-right me-1"></i>Cite
+					</button>
+					<button type="button" class="btn btn-outline-info" id="saveArchiveBtn">
+						<i class="far fa-bookmark me-1"></i>Save
+					</button>
+					<div class="ms-auto">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Advanced Search Modal -->
+	<div class="modal fade" id="advancedSearchModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Advanced Search</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form id="advancedSearchForm">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="mb-3">
+									<label for="titleSearch" class="form-label">Title Contains</label>
+									<input type="text" class="form-control" id="titleSearch">
+								</div>
+								<div class="mb-3">
+									<label for="authorSearch" class="form-label">Author/Creator</label>
+									<input type="text" class="form-control" id="authorSearch">
+								</div>
+								<div class="mb-3">
+									<label for="dateFromSearch" class="form-label">Date From</label>
+									<input type="date" class="form-control" id="dateFromSearch">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="mb-3">
+									<label for="keywordSearch" class="form-label">Keywords</label>
+									<input type="text" class="form-control" id="keywordSearch" placeholder="Separate with commas">
+								</div>
+								<div class="mb-3">
+									<label for="locationSearch" class="form-label">Location</label>
+									<input type="text" class="form-control" id="locationSearch">
+								</div>
+								<div class="mb-3">
+									<label for="dateToSearch" class="form-label">Date To</label>
+									<input type="date" class="form-control" id="dateToSearch">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="mb-3">
+									<label for="typeSearch" class="form-label">Document Type</label>
+									<select class="form-select" id="typeSearch">
+										<option value="">Any Type</option>
+										<option value="official">Official Document</option>
+										<option value="personal">Personal Letter</option>
+										<option value="photograph">Photograph</option>
+										<option value="newspaper">Newspaper</option>
+										<option value="map">Map</option>
+										<option value="audio">Audio Recording</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="mb-3">
+									<label for="languageSearch" class="form-label">Language</label>
+									<select class="form-select" id="languageSearch">
+										<option value="">Any Language</option>
+										<option value="bengali">Bengali</option>
+										<option value="english">English</option>
+										<option value="urdu">Urdu</option>
+										<option value="other">Other</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-outline-danger" onclick="clearAdvancedSearch()">Clear All</button>
+					<button type="button" class="btn btn-primary" onclick="performAdvancedSearch()">Search</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Research Tool Modal -->
+	<div class="modal fade" id="researchToolModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="researchToolModalTitle">Research Tool</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body" id="researchToolModalBody">
+					<!-- Research tool content will be populated by JavaScript -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Scripts -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="../../shared/core.js"></script>
+	<script src="archive.js"></script>
+</body>
+</html>

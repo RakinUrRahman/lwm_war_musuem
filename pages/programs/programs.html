@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Educational Programs - Liberation War Museum</title>
+    
+	<!-- Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<!-- Fonts & Main CSS -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap">
+	<link rel="stylesheet" href="../../assets/css/lwm.css">
+	<!-- Programs Page CSS -->
+	<link rel="stylesheet" href="programs.css">
+</head>
+<body>
+	<div class="app" id="app">
+		<aside class="side" id="side">
+			<div class="brand">
+				<div class="logo">LWM</div>
+				<div>
+					<h1 style="font-size:20px">Digital Liberation War Museum</h1>
+					<div class="muted" style="font-size:13px">Honoring Bangladesh's History</div>
+				</div>
+			</div>
+
+			<nav role="navigation" aria-label="Main menu" id="nav"></nav>
+
+			<div style="margin-top:28px">
+				<h4 style="margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+					<i class="fas fa-handshake"></i> Outreach & Connect
+				</h4>
+				<div class="muted" style="font-size:13px; margin-bottom:12px;">News • Programs • Social Media</div>
+				<div style="display:flex;gap:10px;margin-top:12px">
+					<a href="#" aria-label="YouTube" class="btn" style="padding:8px 12px;"><i class="fab fa-youtube"></i></a>
+					<a href="#" aria-label="Facebook" class="btn" style="padding:8px 12px;"><i class="fab fa-facebook-f"></i></a>
+					<a href="#" aria-label="Instagram" class="btn" style="padding:8px 12px;"><i class="fab fa-instagram"></i></a>
+				</div>
+			</div>
+
+			<div style="margin-top:28px" class="muted">
+				<h4 style="margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+					<i class="fas fa-universal-access"></i> Accessibility
+				</h4>
+				<div style="font-size:13px">Options for better viewing experience</div>
+				<div style="display:flex;gap:8px;margin-top:12px">
+					<button class="btn" id="contrastToggle" style="font-size:12px; padding:6px 10px;">
+						<i class="fas fa-adjust"></i> High Contrast
+					</button>
+					<button class="btn" id="textSizeToggle" style="font-size:12px; padding:6px 10px;">
+						<i class="fas fa-text-height"></i> Text Size
+					</button>
+					<button class="btn" id="darkModeToggle" style="font-size:12px; padding:6px 10px;">
+						<i class="fas fa-moon"></i> <span id="darkModeLabel">Dark Mode</span>
+					</button>
+					<select id="langSelect" class="btn" style="font-size:12px; padding:6px 10px;">
+						<option value="en">English</option>
+						<option value="bn">বাংলা</option>
+					</select>
+				</div>
+			</div>
+		</aside>
+
+		<div class="overlay" id="overlay"></div>
+
+		<main class="main">
+			<div class="topbar">
+				<div style="display:flex;align-items:center;gap:12px">
+					<button class="btn" id="hamb" aria-label="Toggle menu">
+						<i class="fas fa-bars"></i>
+					</button>
+					<div class="search" role="search">
+						<i class="fas fa-search" aria-hidden="true"></i>
+						<input id="globalSearch" placeholder="Search artifacts, stories, memorials..." aria-label="Search"/>
+						<button class="btn" id="searchBtn" aria-label="Search button">Search</button>
+					</div>
+				</div>
+
+				<div style="display:flex;align-items:center;gap:12px">
+					<div id="userStatus" class="muted">Public Visitor</div>
+					<div style="width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:white;font-weight:600">
+						<span id="userInitials">PV</span>
+					</div>
+				</div>
+			</div>
+
+			<section class="content" id="page">
+				<div>
+					<div class="container">
+						<!-- Page Header -->
+						<div class="page-header">
+							<h2><i class="fas fa-graduation-cap"></i> Educational Programs</h2>
+							<p class="lead">Discover our comprehensive educational programs designed to preserve and share the history of Bangladesh's Liberation War through interactive learning experiences.</p>
+						</div>
+
+						<!-- Program Categories -->
+						<div class="program-categories mb-4">
+							<div class="row">
+								<div class="col-12">
+									<div class="category-filters">
+										<button class="btn btn-outline-primary active" data-category="all">All Programs</button>
+										<button class="btn btn-outline-primary" data-category="workshops">Workshops</button>
+										<button class="btn btn-outline-primary" data-category="seminars">Seminars</button>
+										<button class="btn btn-outline-primary" data-category="exhibitions">Exhibitions</button>
+										<button class="btn btn-outline-primary" data-category="conferences">Conferences</button>
+										<button class="btn btn-outline-primary" data-category="tours">Guided Tours</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Featured Programs -->
+						<section class="featured-programs mb-5">
+							<h3 class="section-title">Featured Programs</h3>
+							<div class="row" id="featuredPrograms">
+								<!-- Featured programs will be populated by JS -->
+							</div>
+						</section>
+
+						<!-- All Programs -->
+						<section class="all-programs">
+							<div class="d-flex justify-content-between align-items-center mb-4">
+								<h3 class="section-title">All Programs</h3>
+								<div class="view-options">
+									<button class="btn btn-sm btn-outline-secondary active" data-view="grid">
+										<i class="fas fa-th"></i>
+									</button>
+									<button class="btn btn-sm btn-outline-secondary" data-view="list">
+										<i class="fas fa-list"></i>
+									</button>
+								</div>
+							</div>
+                            
+							<div class="programs-container">
+								<div class="row" id="programsGrid">
+									<!-- Programs will be populated by JS -->
+								</div>
+							</div>
+
+							<!-- Pagination -->
+							<div class="pagination-container mt-4">
+								<div id="programsPagination" class="pagination">
+									<!-- Pagination will be populated by JS -->
+								</div>
+							</div>
+						</section>
+					</div>
+				</div>
+			</section>
+
+			<footer>
+				© <strong>Digital Liberation War Museum</strong> — Honoring the Sacrifices of 1971 • Prototype v2.0
+			</footer>
+		</main>
+	</div>
+
+	<!-- Program Detail Modal -->
+	<div class="program-modal" id="programModal">
+		<div class="program-modal-content">
+			<div class="program-modal-header">
+				<h3 id="modalProgramTitle"></h3>
+				<button class="close-modal" onclick="closeProgramModal()">
+					<i class="fas fa-times"></i>
+				</button>
+			</div>
+			<div class="program-modal-body" id="modalProgramContent">
+				<!-- Program details will be populated by JS -->
+			</div>
+		</div>
+	</div>
+
+	<!-- Registration Modal -->
+	<div class="registration-modal" id="registrationModal">
+		<div class="registration-modal-content">
+			<div class="registration-modal-header">
+				<h4>Program Registration</h4>
+				<button class="close-modal" onclick="closeRegistrationModal()">
+					<i class="fas fa-times"></i>
+				</button>
+			</div>
+			<div class="registration-modal-body">
+				<form id="registrationForm">
+					<div class="row">
+						<div class="col-md-6 mb-3">
+							<label for="fullName" class="form-label">Full Name *</label>
+							<input type="text" class="form-control" id="fullName" required>
+						</div>
+						<div class="col-md-6 mb-3">
+							<label for="email" class="form-label">Email *</label>
+							<input type="email" class="form-control" id="email" required>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6 mb-3">
+							<label for="phone" class="form-label">Phone Number *</nlabel>
+							<input type="tel" class="form-control" id="phone" required>
+						</div>
+						<div class="col-md-6 mb-3">
+							<label for="institution" class="form-label">Institution/Organization</label>
+							<input type="text" class="form-control" id="institution">
+						</div>
+					</div>
+					<div class="mb-3">
+						<label for="participantType" class="form-label">Participant Type *</label>
+						<select class="form-select" id="participantType" required>
+							<option value="">Select Type</option>
+							<option value="student">Student</option>
+							<option value="teacher">Teacher</option>
+							<option value="researcher">Researcher</option>
+							<option value="general">General Public</option>
+							<option value="other">Other</option>
+						</select>
+					</div>
+					<div class="mb-3">
+						<label for="specialRequirements" class="form-label">Special Requirements</label>
+						<textarea class="form-control" id="specialRequirements" rows="3" placeholder="Any special requirements or accessibility needs..."></textarea>
+					</div>
+					<div class="d-flex justify-content-end gap-2">
+						<button type="button" class="btn btn-secondary" onclick="closeRegistrationModal()">Cancel</button>
+						<button type="submit" class="btn btn-primary">Register</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap JS -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- Core JS -->
+	<script src="../../shared/core.js"></script>
+	<!-- Programs JS -->
+	<script src="programs.js"></script>
+</body>
+</html>
