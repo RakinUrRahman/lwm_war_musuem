@@ -106,12 +106,24 @@ const MENU_ITEMS = [
   {id: 'logout', label: 'Logout', icon: 'fas fa-sign-out-alt', roles: ['user', 'manager', 'admin']}
 ]
 
+// Expose menu items globally to avoid load-order/scoping issues
+window.MENU_ITEMS = MENU_ITEMS;
+
 function renderMenu() {
   const nav = byId('nav')
+  if (!nav) {
+    console.warn('[LWM] #nav container not found — skipping menu render')
+    return
+  }
   nav.innerHTML = ''
   const role = state.user ? state.user.role : 'visitor'
+  const items = Array.isArray(window.MENU_ITEMS) ? window.MENU_ITEMS : []
+  if (!items.forEach) {
+    console.error('[LWM] MENU_ITEMS missing or invalid — menu will not be rendered')
+    return
+  }
   
-  MENU_ITEMS.forEach(it => {
+  items.forEach(it => {
     if (it.roles && !it.roles.includes(role)) return
     if (!it.roles || it.roles.includes(role) || role === 'visitor' && !it.roles) {
       const el = document.createElement('div')
@@ -137,7 +149,8 @@ function renderMenu() {
   roleButtons.style.flexWrap = 'wrap'
   roleButtons.style.gap = '6px'
   
-  ['visitor', 'user', 'manager', 'admin'].forEach(r => {
+  const roles = ['visitor', 'user', 'manager', 'admin']
+  roles.forEach(r => {
     const b = document.createElement('button')
     b.className = 'btn'
     b.style.fontSize = '12px'
