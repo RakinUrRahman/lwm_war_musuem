@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — Bangladesh Liberation War Museum</title>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f2f0eb; --surface:rgba(255,255,255,0.7); --paper:#ffffff; --text:#1b1b1b; --muted:#555555;
+  --accent-red:#be1e2d; --accent-green:#006a4e; --accent-gold:#d4b070; --link:#0077cc;
+  --card-radius:18px; --maxw:440px; --shadow: rgba(0,0,0,0.28);
+}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background: var(--bg);
+  color:var(--text);
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  position:relative;
+}
+
+/* Slideshow container */
+.slideshow-container {
+  position: absolute;
+  inset:0;
+  z-index:0;
+  overflow: hidden;
+}
+.slideshow-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top:0; left:0;
+  opacity:0;
+  transition: opacity 1.5s ease-in-out;
+}
+.slideshow-container img.active {
+  opacity:1;
+}
+
+/* Full-page responsive historical content */
+.historical-bg {
+  position: absolute;
+  inset:0;
+  z-index:1;
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  grid-auto-rows: minmax(60px, auto);
+  gap: 12px;
+  justify-items: center;
+  align-items: center;
+  pointer-events: none;
+  padding: 16px;
+  height: 100%;
+  overflow: hidden;
+}
+.historical-bg span {
+  font-family: Merriweather, serif;
+  font-size: calc(1vw + 1vh);
+  font-weight:700;
+  text-align: center;
+  line-height:1.2;
+  color: var(--accent-red);
+  mix-blend-mode: lighten;
+  transition: transform 0.8s ease, opacity 0.8s ease, color 0.5s ease;
+}
+.historical-bg span.green{color: var(--accent-green);}
+.historical-bg span:hover{transform: scale(1.2); opacity: 1; color: var(--accent-gold);}
+
+/* Login card */
+.login-card{
+  position: relative;
+  background: rgba(255,255,255,0.75);
+  padding: 40px;
+  border-radius: var(--card-radius);
+  box-shadow: 0 20px 36px var(--shadow);
+  z-index:2;
+  width:100%;
+  max-width: var(--maxw);
+  text-align:center;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.35);
+  animation: slideUp 1s ease-out;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.login-card:hover{transform: translateY(-4px); box-shadow: 0 24px 48px rgba(0,0,0,0.35);}
+@keyframes slideUp {
+  0%{transform: translateY(50px); opacity:0;}
+  100%{transform: translateY(0); opacity:1;}
+}
+.login-card h1{font-family: Merriweather, serif;font-size: 26px;margin-bottom:16px;color:var(--accent-red);}
+.login-card p{color: var(--muted);font-size: 16px;margin-bottom:28px;}
+input[type=text], input[type=password]{width: 100%;padding: 16px;margin-bottom:20px;border-radius:12px;border:1px solid rgba(0,0,0,0.2);background: rgba(255,255,255,0.95);color: var(--text);font-size:16px;transition: border 0.3s ease, box-shadow 0.3s ease;}
+input[type=text]:focus, input[type=password]:focus{border-color: var(--accent-green);box-shadow: 0 0 12px rgba(0,106,78,0.35);outline:none;}
+select {width: 100%; padding: 12px; margin-bottom: 20px; border-radius:12px; border:1px solid rgba(0,0,0,0.2); font-size:16px; background: rgba(255,255,255,0.95); color: var(--text);}
+button{width:100%;padding:16px;border-radius:12px;border:none;background: var(--accent-green);color:#fff;font-size:17px;cursor:pointer;transition: all 0.3s ease;margin-bottom:12px;}
+button:hover{background: var(--accent-gold);}
+.login-options{display:flex;justify-content:center;gap:12px;margin-top:16px;flex-wrap: wrap;}
+.login-options button{width:auto;padding:12px 18px;font-size:15px;background:#4285F4;color:#fff;transition: all 0.3s ease;}
+.login-options button:hover{opacity:0.85;}
+.login-options button.facebook{background:#3b5998;}
+.extra-content{margin-top:24px;font-size:13px;color:var(--muted);}
+
+/* Visitor login splash */
+.login-splash{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:9999;overflow:hidden;}
+.login-splash.active{display:flex;}
+.login-splash .bg{position:absolute;inset:0;}
+.login-splash .bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s ease-in-out;filter:brightness(0.6) saturate(1.05);} 
+.login-splash .bg img.active{opacity:1;}
+.login-splash .tint{position:absolute;inset:0;background: radial-gradient(ellipse at center, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.55) 70%);} 
+.login-splash .splash-card{position:relative;text-align:center;color:#fff;padding:24px 20px;max-width:820px;margin:0 16px;}
+.login-splash .logo{width:84px;height:84px;border-radius:16px;background: rgba(255,255,255,0.15);display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.35);backdrop-filter: blur(8px);margin-bottom:12px;}
+.login-splash .logo img{width:64px;height:64px;object-fit:contain;}
+.login-splash .badge{display:inline-block;padding:6px 12px;border-radius:999px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.25);font-size:12px;letter-spacing:.6px;margin-bottom:12px;}
+.login-splash .title{font-family:Merriweather,serif;font-size:44px;font-weight:900;letter-spacing:.5px;margin:6px 0 8px;}
+.login-splash .subtitle{font-size:18px;opacity:.95;margin-bottom:12px;}
+.login-splash .hint{font-size:13px;opacity:.9}
+
+/* Flag color stage (red-green theme) shown briefly before war images */
+.login-splash .color-stage{position:absolute;inset:0;opacity:0;transition:opacity .6s ease; background: linear-gradient(135deg, #006a4e, #be1e2d);}
+.login-splash .color-stage.active{opacity:1;}
+.login-splash .color-stage.hide{opacity:0;}
+@keyframes flagPulse{0%{filter:brightness(.9) saturate(1);}100%{filter:brightness(1.05) saturate(1.35);}}
+.login-splash .color-stage{animation: flagPulse 1.1s ease-in-out infinite alternate;}
+
+/* Hide underlying login UI while splash is active */
+body.splash-active .slideshow-container,
+body.splash-active .historical-bg,
+body.splash-active .login-card{display:none !important;}
+</style>
+</head>
+<body>
+
+<div class="slideshow-container">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Artifact_in_liberation_war_museum%2C_Agargaon_61.jpg/2560px-Artifact_in_liberation_war_museum%2C_Agargaon_61.jpg" class="active">
+  <img src="https://www.tbsnews.net/sites/default/files/styles/infograph/public/images/2020/12/15/jadu_ghor_8-min.jpg">
+  <img src="https://tds-images.thedailystar.net/sites/default/files/styles/very_big_201/public/news/images/re-visiting_the_liberation_war_museum2.jpg">
+</div>
+
+<div class="historical-bg">
+  <span>The Bangladesh Liberation War 1971</span>
+  <span>গণহত্যা</span>
+  <span>Independence</span>
+  <span>Sheikh Mujibur Rahman</span>
+  <span>Freedom Fighters</span>
+  <span>Historic Battles</span>
+  <span>National Flag</span>
+  <span>Historical Maps</span>
+  <span>Key Figures</span>
+  <span>Genocide Memorials</span>
+  <span>ত্যাগ ও সাহস</span>
+  <span>Heroes' Stories</span>
+  <span>Liberation Day Events</span>
+  <span>স্বাধীনতা সংগ্রামের ইতিহাস</span>
+  <span>Cultural Heritage</span>
+  <span>Museum Artifacts</span>
+  <span>প্রত্নসামগ্রী</span>
+  <span>Museums Preserve History</span>
+  <span>Sacrifice and Courage</span>
+  <span>Patriotic Stories</span>
+  <span>National Heroes</span>
+  <span>Historic Events</span>
+  <span>Bangladesh Flag</span>
+  <span>War Chronicles</span>
+  <span>Freedom Struggle</span>
+  <span>তথ্য ও ইতিহাস</span>
+  <span>Legacy of 1971</span>
+  <span>Cultural Heritage</span>
+  <span>Bravery and Sacrifice</span>
+  <span>Heroes Remembered</span>
+  <span>Patriotic Legacy</span>
+  <span>Historic Memories</span>
+  <span>Freedom Fighters' Tales</span>
+  <span>National Pride</span>
+  <span>সংগ্রহালয়</span>
+  <span>Bangladesh History</span>
+  <span>1971 Chronicles</span>
+  <span>Martyrs’ Stories</span>
+  <span>Legacy of Independence</span>
+  <span>Valor and Courage</span>
+  <span>Freedom and Sacrifice</span>
+  <span>War Memorials</span>
+  <span>National Liberation</span>
+  <span>Historic Resistance</span>
+  <span>Revolutionary Struggle</span>
+  <span>Freedom Fighters</span>
+  <span>Historic Achievements</span>
+  <!-- Extra entries to fill last row -->
+  <span>Heroes’ Legacy</span>
+  <span>Patriotic Symbols</span>
+  <span>War Strategies</span>
+  <span>Memorial Artifacts</span>
+  <span>Freedom Chronicles</span>
+  <span>Bangladesh Independence</span>
+  <span>Revolutionary Moments</span>
+  <span>National Pride Stories</span>
+</div>
+
+
+<div class="login-card" role="form" aria-label="Login form">
+  <h1>Bangladesh Liberation War Museum</h1>
+  <p>Access curator/admin portal</p>
+  
+  <!-- Admin/Visitor combo -->
+  <select id="user-type">
+    <option value="">Select User Type</option>
+    <option value="admin">Admin</option>
+    <option value="visitor">Visitor</option>
+  </select>
+  
+  <input type="text" placeholder="Username" aria-label="Username" id="username">
+  <input type="password" placeholder="Password" aria-label="Password">
+  <button id="loginBtn">Login</button>
+  <div class="login-options">
+    <button>Login with Google</button>
+    <button class="facebook">Login with Facebook</button>
+  </div>
+  <div class="extra-content">© 2025 Liberation War Museum • Preserving history for the world</div>
+</div>
+
+<!-- Splash that appears after Visitor login before redirecting to Home -->
+<div id="loginSplash" class="login-splash" aria-hidden="true">
+  <div class="bg">
+    <img src="../../media/uploads/artifacts/OLC.webp" class="active" alt="Liberation War"/>
+    <img src="../../media/uploads/artifacts/OIP.webp" alt="Liberation War"/>
+    <img src="../../media/uploads/artifacts/Human_Remains.jpg" alt="Liberation War"/>
+  </div>
+  <div class="color-stage"></div>
+  <div class="tint"></div>
+  <div class="splash-card" role="dialog" aria-modal="true" aria-labelledby="splashTitle">
+    <div class="logo"><img src="../../logo.png" alt="LWM logo"/></div>
+    <div class="badge">ডিজিটাল মুক্তিযুদ্ধ জাদুঘর</div>
+    <div id="splashTitle" class="title">স্বাগতম</div>
+    <div class="subtitle">মুক্তিযুদ্ধের চেতনায় — বাংলাদেশের স্বাধীনতার স্মৃতি লালন করি</div>
+  </div>
+</div>
+
+<script>
+// Slideshow
+const slides = document.querySelectorAll('.slideshow-container img');
+let current = 0;
+setInterval(()=>{
+  slides.forEach((slide,i)=> slide.classList.remove('active'));
+  current = (current + 1) % slides.length;
+  slides[current].classList.add('active');
+},3000);
+
+// Checkerboard color pattern
+const spans = document.querySelectorAll('.historical-bg span');
+spans.forEach((span,i)=>{
+  if(i % 2 === 0){
+    span.classList.remove('green');
+  } else {
+    span.classList.add('green');
+  }
+});
+
+// Admin/Visitor combo JS
+const userType = document.getElementById('user-type');
+const username = document.getElementById('username');
+const loginBtn = document.getElementById('loginBtn');
+
+userType.addEventListener('change', ()=>{
+  if(userType.value === "admin"){
+    username.value = "admin";
+  } else if(userType.value === "visitor"){
+    username.value = "visitor";
+  } else {
+    username.value = "";
+  }
+});
+
+loginBtn.addEventListener('click', ()=>{
+  const type = userType.value;
+  if(type === "admin"){
+    window.location.href = "draft.html";
+  } else if(type === "visitor"){
+    const splash = document.getElementById('loginSplash');
+    if (splash) {
+      document.body.classList.add('splash-active');
+      splash.classList.add('active');
+      // Phase 1: show flag color stage briefly
+      const colorStage = splash.querySelector('.color-stage');
+      if (colorStage) colorStage.classList.add('active');
+
+      // Phase 2: after short delay, fade to war images and start timer
+      const imgs = splash.querySelectorAll('.bg img');
+      let idx = 0;
+      let rot = null;
+      let redirectTimer = null;
+      const startImages = ()=>{
+        if (colorStage) colorStage.classList.add('hide');
+        // start rotating images while we wait
+        rot = setInterval(()=>{
+          imgs.forEach((im,i)=> im.classList.toggle('active', i === idx));
+          idx = (idx + 1) % imgs.length;
+        }, 1100);
+        redirectTimer = setTimeout(proceed, 2500); // show images ~2.5s
+      };
+      const proceed = ()=> {
+        if (rot) clearInterval(rot);
+        if (redirectTimer) clearTimeout(redirectTimer);
+        window.location.href = "../home/home.html";
+      };
+      splash.addEventListener('click', proceed, { once: true });
+      setTimeout(startImages, 900); // ~0.9s of flag colors, then images
+    } else {
+      // Fallback: direct redirect if splash missing
+      window.location.href = "../home/home.html";
+    }
+  } else {
+    alert("Please select Admin or Visitor!");
+  }
+});
+</script>
+
+</body>
+</html>

@@ -35,6 +35,45 @@ const LANG = {
 
 let currentLang = localStorage.getItem('lwm_lang') || 'en';
 
+// Menu labels in Bangla for bilingual UI
+const BN_MENU_LABELS = {
+  'home': 'হোম',
+  'news': 'সংবাদ ও আপডেট',
+  'programs': 'প্রোগ্রাম ও ইভেন্ট',
+  'explore': 'আর্টিফ্যাক্টস অনুসন্ধান',
+  'timeline': 'ঐতিহাসিক টাইমলাইন',
+  'virtual-tour': 'ভার্চুয়াল ট্যুর',
+  'media': 'মিডিয়া লাইব্রেরি',
+  'education': 'শিক্ষা পোর্টাল',
+  'archive': 'আর্কাইভ সিস্টেম',
+  'stories': 'নাগরিকদের গল্প',
+  'memorial': 'স্মারক দেয়াল',
+  'map': 'স্মৃতির মানচিত্র',
+  'ticket': 'ভ্রমণ বুকিং',
+  'login': 'লগইন / রেজিস্টার',
+  'profile': 'আমার প্রোফাইল',
+  'favorites': 'আমার পছন্দসমূহ',
+  'manager': 'ম্যানেজার ড্যাশবোর্ড',
+  'committee': 'কমিটি ব্যবস্থাপনা',
+  'donations': 'আর্টিফ্যাক্ট দান',
+  'logout': 'লগআউট'
+};
+
+// Generic UI translations keyed for data-i18n usage and shared UI
+const TRANSLATIONS = {
+  'brand.title': { en: 'Digital Liberation War Museum', bn: 'ডিজিটাল মুক্তিযুদ্ধ জাদুঘর' },
+  'brand.subtitle': { en: "Honoring Bangladesh's History", bn: 'বাংলাদেশের ইতিহাসকে সম্মান' },
+  'search.placeholder': { en: 'Search artifacts, stories, memorials...', bn: 'আর্টিফ্যাক্ট, গল্প, স্মৃতিস্তম্ভ খুঁজুন...' },
+  'search.button': { en: 'Search', bn: 'খোঁজ করুন' },
+  'footer.text': { en: '© Digital Liberation War Museum — Honoring the Sacrifices of 1971 • Prototype v2.0', bn: '© ডিজিটাল মুক্তিযুদ্ধ জাদুঘর — ১৯৭১ এর ত্যাগকে সম্মান • প্রোটোটাইপ v2.0' },
+  // Home page common items (used if present)
+  'home.hero.title': { en: 'Honoring the Sacrifices of 1971', bn: '১৯৭১ সালের ত্যাগকে সম্মান' },
+  'home.hero.subtitle': { en: "The Digital Liberation War Museum preserves the memory of Bangladesh's struggle for independence through digital archives, educational programs, and community engagement.", bn: 'ডিজিটাল মুক্তিযুদ্ধ জাদুঘর ডিজিটাল আর্কাইভ, শিক্ষামূলক প্রোগ্রাম এবং কমিউনিটি অংশগ্রহণের মাধ্যমে বাংলাদেশের স্বাধীনতা সংগ্রামের স্মৃতি সংরক্ষণ করে।' },
+  'home.timeline.1952': { en: 'Language Movement', bn: 'ভাষা আন্দোলন' },
+  'home.timeline.1971': { en: 'Liberation War', bn: 'মুক্তিযুদ্ধ' },
+  'home.timeline.2025': { en: 'Digital Heritage', bn: 'ডিজিটাল ঐতিহ্য' },
+};
+
 function setLang(lang) {
   currentLang = lang;
   localStorage.setItem('lwm_lang', lang);
@@ -42,6 +81,7 @@ function setLang(lang) {
 }
 
 function updateLangUI() {
+  // Sidebar headings
   const accessIcon = document.querySelector('aside.side h4 i.fas.fa-universal-access');
   if (accessIcon && accessIcon.nextSibling) {
     accessIcon.nextSibling.textContent = ' ' + LANG[currentLang].accessibility;
@@ -63,7 +103,42 @@ function updateLangUI() {
   if (demoRole) demoRole.textContent = LANG[currentLang].demoRole;
   const userStatus = document.getElementById('userStatus');
   if (!state.user && userStatus) userStatus.textContent = LANG[currentLang].visitor;
+
+  // Brand title/subtitle
+  const brandTitle = document.querySelector('.brand h1');
+  if (brandTitle) brandTitle.textContent = TRANSLATIONS['brand.title'][currentLang];
+  const brandSub = document.querySelector('.brand .muted');
+  if (brandSub) brandSub.textContent = TRANSLATIONS['brand.subtitle'][currentLang];
+
+  // Search placeholder and button label
+  const searchInput = document.getElementById('globalSearch');
+  if (searchInput) searchInput.setAttribute('placeholder', TRANSLATIONS['search.placeholder'][currentLang]);
+  const searchBtn = document.getElementById('searchBtn');
+  if (searchBtn) searchBtn.textContent = TRANSLATIONS['search.button'][currentLang];
+
+  // Footer text (keep © formatting)
+  const footer = document.querySelector('footer');
+  if (footer) footer.innerHTML = TRANSLATIONS['footer.text'][currentLang];
+
+  // Apply data-i18n keys across DOM
+  applyDataI18n();
+
+  // Re-render menu for language changes
+  renderMenu();
 }
+
+// === Sidebar Toggle (robust, reusable) ===
+function toggleSidebar(forceState) {
+  const side = document.getElementById('side');
+  const overlay = document.getElementById('overlay');
+  if (!side || !overlay) return;
+  const willOpen = typeof forceState === 'boolean' ? forceState : !side.classList.contains('open');
+  side.classList.toggle('open', willOpen);
+  overlay.classList.toggle('active', willOpen);
+  console.log('toggleSidebar -> open:', willOpen);
+}
+// Expose globally so inline handlers can call it as a fallback
+window.toggleSidebar = toggleSidebar;
 
 // === Core State Management ===
 const state = {
@@ -130,7 +205,8 @@ function renderMenu() {
       el.className = 'nav-item'
       el.tabIndex = 0
       el.dataset.page = it.id
-      el.innerHTML = `<i class="${it.icon}"></i> <span>${it.label}</span>`
+      const label = currentLang === 'bn' ? (BN_MENU_LABELS[it.id] || it.label) : it.label
+      el.innerHTML = `<i class="${it.icon}"></i> <span>${label}</span>`
       el.addEventListener('click', () => navigate(it.id))
       el.addEventListener('keypress', e => { if (e.key === 'Enter') navigate(it.id) })
       nav.appendChild(el)
@@ -448,23 +524,47 @@ function memorialCard(m) {
 
 // === Core Initialization ===
 function initializeCore() {
-  // Hamburger menu
-  const hamb = byId('hamb');
-  if (hamb) {
-    hamb.addEventListener('click', () => {
-      document.getElementById('side').classList.toggle('open')
-      document.getElementById('overlay').classList.toggle('active')
-    })
-  }
+  console.log('initializeCore called');
+  
+  // Wait a bit for all elements to be ready
+  setTimeout(() => {
+    // Manual test to check if sidebar works
+    window.testSidebar = function() {
+      const side = document.getElementById('side');
+      const overlay = document.getElementById('overlay');
+      if (side && overlay) {
+        side.classList.add('open');
+        overlay.classList.add('active');
+        console.log('Manual sidebar test - opened');
+        setTimeout(() => {
+          side.classList.remove('open');
+          overlay.classList.remove('active');
+          console.log('Manual sidebar test - closed');
+        }, 2000);
+      }
+    };
+    
+    // Hamburger menu
+    const hamb = byId('hamb');
+    if (hamb) {
+      console.log('Hamburger button found, adding listener'); // Debug log
+      // Bind in capture phase to avoid other handlers (like ripple) swallowing the event
+      hamb.addEventListener('click', (e) => {
+        console.log('Hamburger button clicked!');
+        e.preventDefault();
+        e.stopPropagation();
+        toggleSidebar();
+      }, true)
+    } else {
+      console.log('Hamburger button not found!'); // Debug log
+    }
 
-  // Overlay close
-  const overlay = byId('overlay');
-  if (overlay) {
-    overlay.addEventListener('click', () => {
-      document.getElementById('side').classList.remove('open')
-      document.getElementById('overlay').classList.remove('active')
-    })
-  }
+    // Overlay close
+    const overlay = byId('overlay');
+    if (overlay) {
+      overlay.addEventListener('click', () => toggleSidebar(false))
+    }
+  }, 100);
 
   // Search functionality
   const globalSearch = byId('globalSearch');
@@ -538,6 +638,64 @@ function initializeCore() {
   }, 100);
 }
 
+// Global delegated handlers as a robustness fallback
+document.addEventListener('click', (e) => {
+  // Toggle sidebar when clicking hamburger (works even if per-page listener didn't bind)
+  let hambBtn = null;
+  if (e.target.id === 'hamb') {
+    hambBtn = e.target;
+  } else if (e.target.closest) {
+    hambBtn = e.target.closest('#hamb');
+  }
+  
+  if (hambBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleSidebar();
+    return;
+  }
+
+  // Close when clicking overlay (delegated)
+  if (e.target.id === 'overlay') {
+    toggleSidebar(false);
+    console.log('Overlay clicked, sidebar closed'); // Debug log
+  }
+});
+
+// Apply translations to any element with [data-i18n]
+function applyDataI18n() {
+  const nodes = document.querySelectorAll('[data-i18n]');
+  nodes.forEach(node => {
+    const key = node.getAttribute('data-i18n');
+    if (!key) return;
+    const t = TRANSLATIONS[key];
+    if (!t) return;
+    if (node.placeholder !== undefined && node.tagName === 'INPUT') {
+      node.placeholder = t[currentLang] || node.placeholder;
+    } else {
+      node.textContent = t[currentLang] || node.textContent;
+    }
+  });
+  // Home-specific ids if present
+  const ht = document.getElementById('heroTitle');
+  if (ht && TRANSLATIONS['home.hero.title']) ht.textContent = TRANSLATIONS['home.hero.title'][currentLang];
+  const hs = document.getElementById('heroSubtitle');
+  if (hs && TRANSLATIONS['home.hero.subtitle']) hs.textContent = TRANSLATIONS['home.hero.subtitle'][currentLang];
+  document.querySelectorAll('.timeline-item .timeline-content').forEach(el => {
+    const txt = el.textContent.trim();
+    const map = {
+      'Language Movement': 'home.timeline.1952',
+      'Liberation War': 'home.timeline.1971',
+      'Digital Heritage': 'home.timeline.2025',
+      'ভাষা আন্দোলন': 'home.timeline.1952',
+      'মুক্তিযুদ্ধ': 'home.timeline.1971',
+      'ডিজিটাল ঐতিহ্য': 'home.timeline.2025'
+    };
+    const key = map[txt];
+    if (key && TRANSLATIONS[key]) el.textContent = TRANSLATIONS[key][currentLang];
+  });
+}
+
 // Placeholder functions for actions (to be implemented in individual pages)
 function viewArtifact(id) { alert(`View artifact ${id}`) }
 function playMedia(id) { alert(`Play media ${id}`) }
@@ -547,9 +705,16 @@ function readStory(id) { alert(`Read story ${id}`) }
 function viewMemorial(id) { alert(`View memorial ${id}`) }
 
 // Initialize core functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Core.js initializing...');
+  initializeCore();
+});
+
+// Also initialize if DOM is already loaded (fallback)
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initializeCore);
 } else {
+  console.log('DOM already loaded, initializing core immediately');
   initializeCore();
 }
 

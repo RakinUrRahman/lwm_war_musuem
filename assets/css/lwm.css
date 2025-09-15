@@ -60,13 +60,20 @@ p {
   background: linear-gradient(180deg, var(--card), #f0fdf4);
   border-right: 1px solid rgba(0, 106, 78, 0.1);
   padding: 28px;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: -320px; /* hidden by default, slides in on .open */
   height: 100vh;
   overflow: auto;
   transition: var(--transition);
-  z-index: 100;
+  z-index: 1000;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
 }
+
+.side.open { left: 0; }
+
+.overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 999; }
+.overlay.active { display: block; }
 
 .brand {
   display: flex;
@@ -325,10 +332,6 @@ footer { padding: 28px; text-align: center; color: var(--muted); background: rgb
 }
 
 @media (max-width: 900px) {
-  .side { position: fixed; left: -320px; z-index: 1000; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); }
-  .side.open { left: 0; }
-  .overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 999; }
-  .overlay.active { display: block; }
   .search input { width: 180px; }
   .stats { flex-wrap: wrap; }
 }

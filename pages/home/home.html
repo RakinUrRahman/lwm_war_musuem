@@ -83,73 +83,317 @@
 
 			<section class="content" id="page">
 				<div>
-					<div class="hero">
-						<div class="hero-content">
-							<h2>Honoring the Sacrifices of 1971</h2>
-							<p class="muted">The Digital Liberation War Museum preserves the memory of Bangladesh's struggle for independence through digital archives, educational programs, and community engagement.</p>
-              
-							<div class="stats">
-								<div class="stat">
-									<div class="number" id="artifactCount">24+</div>
-									<div class="muted">Artifacts</div>
+					<!-- Interactive Hero Section -->
+					<div class="hero-interactive">
+						<div class="hero-background">
+							<div class="floating-elements">
+								<div class="float-element" style="--delay: 0s"><i class="fas fa-star"></i></div>
+								<div class="float-element" style="--delay: 1s"><i class="fas fa-dove"></i></div>
+								<div class="float-element" style="--delay: 2s"><i class="fas fa-flag"></i></div>
+								<div class="float-element" style="--delay: 0.5s"><i class="fas fa-heart"></i></div>
+								<div class="float-element" style="--delay: 1.5s"><i class="fas fa-medal"></i></div>
+							</div>
+						</div>
+						
+						<div class="hero-content-interactive">
+							<div class="typing-animation">
+								<h1 class="hero-title" id="heroTitle">Honoring the Sacrifices of 1971</h1>
+								<div class="title-underline"></div>
+							</div>
+							
+							<p class="hero-subtitle" id="heroSubtitle">The Digital Liberation War Museum preserves the memory of Bangladesh's struggle for independence through digital archives, educational programs, and community engagement.</p>
+							
+							<!-- Interactive Timeline Preview -->
+							<div class="timeline-preview">
+								<div class="timeline-item active" data-year="1952">
+									<div class="timeline-dot"></div>
+									<div class="timeline-content">Language Movement</div>
 								</div>
-								<div class="stat">
-									<div class="number" id="storyCount">12+</div>
-									<div class="muted">Stories</div>
+								<div class="timeline-item" data-year="1971">
+									<div class="timeline-dot"></div>
+									<div class="timeline-content">Liberation War</div>
 								</div>
-								<div class="stat">
-									<div class="number" id="eventCount">6</div>
-									<div class="muted">Current Events</div>
+								<div class="timeline-item" data-year="2025">
+									<div class="timeline-dot"></div>
+									<div class="timeline-content">Digital Heritage</div>
 								</div>
 							</div>
-              
-							<div style="margin-top:24px">
-								<button class="accent-btn" onclick="navigate('programs')">
-									<i class="fas fa-calendar-alt"></i> View Programs
+							
+							<!-- Interactive Stats with Counters -->
+							<div class="interactive-stats">
+								<div class="stat-card" data-target="156" data-suffix="+">
+									<div class="stat-icon"><i class="fas fa-archive"></i></div>
+									<div class="stat-number" id="artifactCount">0</div>
+									<div class="stat-label">Artifacts</div>
+									<div class="stat-bar"></div>
+								</div>
+								<div class="stat-card" data-target="89" data-suffix="+">
+									<div class="stat-icon"><i class="fas fa-book-open"></i></div>
+									<div class="stat-number" id="storyCount">0</div>
+									<div class="stat-label">Stories</div>
+									<div class="stat-bar"></div>
+								</div>
+								<div class="stat-card" data-target="12" data-suffix="">
+									<div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+									<div class="stat-number" id="eventCount">0</div>
+									<div class="stat-label">Events</div>
+									<div class="stat-bar"></div>
+								</div>
+								<div class="stat-card" data-target="3000" data-suffix="+">
+									<div class="stat-icon"><i class="fas fa-users"></i></div>
+									<div class="stat-number" id="visitorCount">0</div>
+									<div class="stat-label">Visitors</div>
+									<div class="stat-bar"></div>
+								</div>
+							</div>
+							
+							<!-- Interactive Action Buttons -->
+							<div class="hero-actions">
+								<button class="interactive-btn primary" onclick="navigate('virtual-tour')" data-text="Start Virtual Tour">
+									<span class="btn-content">
+										<i class="fas fa-vr-cardboard"></i>
+										<span class="btn-text">Start Virtual Tour</span>
+									</span>
+									<div class="btn-ripple"></div>
 								</button>
-								<button class="btn" style="margin-left:12px" onclick="navigate('explore')">
-									<i class="fas fa-archive"></i> Explore Artifacts
+								<button class="interactive-btn secondary" onclick="navigate('explore')" data-text="Explore Collection">
+									<span class="btn-content">
+										<i class="fas fa-compass"></i>
+										<span class="btn-text">Explore Collection</span>
+									</span>
+									<div class="btn-ripple"></div>
 								</button>
 							</div>
 						</div>
-            
-						<div class="hero-image">
-							<img src="../../logo.png" alt="Liberation War Museum Exhibit">
+						
+						<!-- Interactive Visual Element -->
+						<div class="hero-visual">
+							<div class="visual-container">
+								<div class="rotating-badge">
+									<div class="badge-content">
+										<span class="badge-year">1971</span>
+										<span class="badge-text">Liberation</span>
+									</div>
+								</div>
+								<div class="visual-elements">
+									<div class="visual-item" style="--index: 1">
+										<img src="../../logo.png" alt="Museum Logo" class="museum-logo">
+									</div>
+									<div class="visual-item" style="--index: 2">
+										<div class="flag-animation">🇧🇩</div>
+									</div>
+									<div class="visual-item" style="--index: 3">
+										<div class="pulse-circle"></div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
-          
-					<div class="section-title">
-						<i class="fas fa-newspaper"></i>
-						<h3>Latest News & Announcements</h3>
+					
+						<!-- Gallery Showcase Section -->
+						<section class="gallery-showcase" id="gallery-showcase" aria-labelledby="galleryTitle">
+							<div class="gallery-intro">
+								<div class="gallery-location reveal"><i class="fas fa-landmark"></i> Dhaka, Bangladesh</div>
+								<h2 id="galleryTitle" class="gallery-title reveal">BEGIN AN EXPLORATION THROUGH A GALLERY SHOWCASING ARTISAN CREATIVITY.</h2>
+							</div>
+
+							<div class="gallery-panorama" aria-label="Panoramic gallery view">
+								<figure class="panel reveal" style="--rot:-6deg"><img src="../media/uploads/artifacts/Human_Remains.jpg" alt="Liberation War Museum gallery panel 1"></figure>
+								<figure class="panel reveal" style="--rot:-3deg"><img src="../media/uploads/artifacts/1756579360_download (3).jpeg" alt="Liberation War Museum gallery panel 2"></figure>
+								<figure class="panel reveal" style="--rot:0deg"><img src="../media/uploads/artifacts/1756724716_WhatsApp Image 2025-09-01 at 16.50.11_7a72ed69.jpg" alt="Liberation War Museum gallery panel 3"></figure>
+								<figure class="panel reveal" style="--rot:3deg"><img src="../media/uploads/artifacts/OIP.webp" alt="Liberation War Museum gallery panel 4"></figure>
+								<figure class="panel reveal" style="--rot:6deg"><img src="../media/uploads/artifacts/th.jpg" alt="Liberation War Museum gallery panel 5"></figure>
+							</div>
+
+							<div class="gallery-subtext">
+								<p class="gallery-kicker reveal">A blend of talented genius in art</p>
+								<h3 class="gallery-subheadline reveal">STEP INTO A REALM OF ARTISTIC EXPRESSION, WHERE OUR GALLERY SHOWCASES <span class="pillar" aria-hidden="true">🏛️</span> THE EXTRAORDINARY WORKS OF TALENTED ARTISTS FROM ACROSS THE WORLD</h3>
+							</div>
+
+							<div class="gallery-grid">
+								<figure class="grid-item reveal">
+									<img src="../media/uploads/artifacts/OLC.webp" alt="Historical exhibit thumbnail 1">
+								</figure>
+								<figure class="grid-item reveal">
+									<img src="../media/uploads/thumbnails/1756587899_thumb_download1.jpeg" alt="Historical exhibit thumbnail 2">
+								</figure>
+								<figure class="grid-item reveal">
+									<img src="../media/uploads/thumbnails/1756590463_thumb_Screenshot 2025-08-31 034235.png" alt="Historical exhibit thumbnail 3">
+								</figure>
+								<figure class="grid-item reveal">
+									<img src="../media/uploads/artifacts/OLC.webp" alt="Historical exhibit thumbnail 4">
+								</figure>
+							</div>
+						</section>
+
+					<!-- Interactive Discovery Section -->
+					<div class="discovery-section">
+						<div class="section-header">
+							<div class="section-icon">
+								<i class="fas fa-compass"></i>
+							</div>
+							<h2 class="section-title-animated">Discover Our Heritage</h2>
+							<p class="section-subtitle">Explore different facets of Bangladesh's liberation story</p>
+						</div>
+						
+						<div class="discovery-grid">
+							<div class="discovery-card" data-category="news" onclick="navigate('news')">
+								<div class="card-background"></div>
+								<div class="card-icon">
+									<i class="fas fa-newspaper"></i>
+								</div>
+								<h3>Latest Updates</h3>
+								<p>Stay informed with recent news and announcements</p>
+								<div class="card-stats">
+									<span id="newsCount">Loading...</span>
+								</div>
+								<div class="card-hover-effect"></div>
+							</div>
+							
+							<div class="discovery-card" data-category="artifacts" onclick="navigate('explore')">
+								<div class="card-background"></div>
+								<div class="card-icon">
+									<i class="fas fa-archive"></i>
+								</div>
+								<h3>Sacred Artifacts</h3>
+								<p>Explore historical items that tell our story</p>
+								<div class="card-stats">
+									<span id="artifactTotal">Loading...</span>
+								</div>
+								<div class="card-hover-effect"></div>
+							</div>
+							
+							<div class="discovery-card" data-category="stories" onclick="navigate('stories')">
+								<div class="card-background"></div>
+								<div class="card-icon">
+									<i class="fas fa-book-heart"></i>
+								</div>
+								<h3>Personal Stories</h3>
+								<p>Read firsthand accounts from brave souls</p>
+								<div class="card-stats">
+									<span id="storiesTotal">Loading...</span>
+								</div>
+								<div class="card-hover-effect"></div>
+							</div>
+							
+							<div class="discovery-card" data-category="events" onclick="navigate('programs')">
+								<div class="card-background"></div>
+								<div class="card-icon">
+									<i class="fas fa-calendar-star"></i>
+								</div>
+								<h3>Live Events</h3>
+								<p>Join us for commemorative programs</p>
+								<div class="card-stats">
+									<span id="eventsTotal">Loading...</span>
+								</div>
+								<div class="card-hover-effect"></div>
+							</div>
+						</div>
 					</div>
-					<div class="grid" id="newsGrid">
-						<!-- News cards will be loaded here -->
+					
+					<!-- Interactive Features Showcase -->
+					<div class="features-showcase">
+						<div class="showcase-header">
+							<h2>Experience History Like Never Before</h2>
+							<p>Immerse yourself in interactive experiences</p>
+						</div>
+						
+						<div class="features-container">
+							<div class="feature-item active" data-feature="virtual-tour">
+								<div class="feature-preview">
+									<div class="preview-screen">
+										<i class="fas fa-vr-cardboard fa-3x"></i>
+										<div class="preview-overlay">Virtual Reality Tour</div>
+									</div>
+								</div>
+								<div class="feature-info">
+									<h3>Virtual Reality Experience</h3>
+									<p>Step into history with our immersive VR tour of liberation war sites</p>
+									<button class="feature-btn" onclick="navigate('virtual-tour')">
+										<i class="fas fa-play"></i> Start Tour
+									</button>
+								</div>
+							</div>
+							
+							<div class="feature-item" data-feature="timeline">
+								<div class="feature-preview">
+									<div class="preview-screen">
+										<i class="fas fa-timeline fa-3x"></i>
+										<div class="preview-overlay">Interactive Timeline</div>
+									</div>
+								</div>
+								<div class="feature-info">
+									<h3>Interactive Timeline</h3>
+									<p>Navigate through key moments of the liberation movement</p>
+									<button class="feature-btn" onclick="navigate('timeline')">
+										<i class="fas fa-clock"></i> Explore Timeline
+									</button>
+								</div>
+							</div>
+							
+							<div class="feature-item" data-feature="map">
+								<div class="feature-preview">
+									<div class="preview-screen">
+										<i class="fas fa-map-marked-alt fa-3x"></i>
+										<div class="preview-overlay">Memory Map</div>
+									</div>
+								</div>
+								<div class="feature-info">
+									<h3>Map of Memory</h3>
+									<p>Discover significant locations and their historical importance</p>
+									<button class="feature-btn" onclick="navigate('map')">
+										<i class="fas fa-map"></i> View Map
+									</button>
+								</div>
+							</div>
+						</div>
+						
+						<div class="feature-navigation">
+							<button class="nav-dot active" data-target="0"></button>
+							<button class="nav-dot" data-target="1"></button>
+							<button class="nav-dot" data-target="2"></button>
+						</div>
 					</div>
-					<div class="text-center">
-						<button class="btn" onclick="navigate('news')">
-							<i class="fas fa-plus"></i> View All News
-						</button>
-					</div>
-          
-					<div class="section-title">
-						<i class="fas fa-archive"></i>
-						<h3>Featured Artifacts</h3>
-					</div>
-					<div class="grid" id="featuredGrid">
-						<!-- Featured artifacts will be loaded here -->
-					</div>
-					<div class="text-center">
-						<button class="btn" onclick="navigate('explore')">
-							<i class="fas fa-plus"></i> Explore More
-						</button>
-					</div>
-          
-					<div class="section-title">
-						<i class="fas fa-calendar-alt"></i>
-						<h3>Upcoming Events</h3>
-					</div>
-					<div class="grid" id="eventsGrid">
-						<!-- Event cards will be loaded here -->
+					
+					<!-- Call to Action Section -->
+					<div class="cta-section">
+						<div class="cta-content">
+							<div class="cta-icon">
+								<i class="fas fa-hands-helping"></i>
+							</div>
+							<h2>Join Our Mission</h2>
+							<p>Help us preserve and share the legacy of Bangladesh's liberation struggle</p>
+							<div class="cta-actions">
+								<button class="cta-btn primary" onclick="navigate('donations')">
+									<i class="fas fa-heart"></i>
+									<span>Support Our Cause</span>
+								</button>
+								<button class="cta-btn secondary" onclick="navigate('stories')">
+									<i class="fas fa-pen"></i>
+									<span>Share Your Story</span>
+								</button>
+								<button class="cta-btn tertiary" onclick="navigate('education')">
+									<i class="fas fa-graduation-cap"></i>
+									<span>Learn More</span>
+								</button>
+							</div>
+						</div>
+						<div class="cta-visual">
+							<div class="impact-counter">
+								<div class="counter-item">
+									<span class="counter-number" data-target="50000">0</span>
+									<span class="counter-label">Lives Remembered</span>
+								</div>
+								<div class="counter-item">
+									<span class="counter-number" data-target="1971">0</span>
+									<span class="counter-label">Year of Freedom</span>
+								</div>
+								<div class="counter-item">
+									<span class="counter-number" data-target="54">0</span>
+									<span class="counter-label">Years of Independence</span>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</section>
@@ -161,7 +405,7 @@
 	</div>
 
 	<!-- Core functionality -->
-	<script src="../../shared/core.js?v=2"></script>
+	<script src="../../shared/core.js?v=3"></script>
 	<!-- Page-specific script -->
 	<script src="home.js"></script>
 </body>
