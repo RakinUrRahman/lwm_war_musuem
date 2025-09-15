@@ -227,14 +227,14 @@ body.splash-active .login-card{display:none !important;}
 <!-- Splash that appears after Visitor login before redirecting to Home -->
 <div id="loginSplash" class="login-splash" aria-hidden="true">
   <div class="bg">
-    <img src="../../media/uploads/artifacts/OLC.webp" class="active" alt="Liberation War"/>
-    <img src="../../media/uploads/artifacts/OIP.webp" alt="Liberation War"/>
-    <img src="../../media/uploads/artifacts/Human_Remains.jpg" alt="Liberation War"/>
+    <img src="media/uploads/artifacts/OLC.webp" class="active" alt="Liberation War"/>
+    <img src="media/uploads/artifacts/OIP.webp" alt="Liberation War"/>
+    <img src="media/uploads/artifacts/Human_Remains.jpg" alt="Liberation War"/>
   </div>
   <div class="color-stage"></div>
   <div class="tint"></div>
   <div class="splash-card" role="dialog" aria-modal="true" aria-labelledby="splashTitle">
-    <div class="logo"><img src="../../logo.png" alt="LWM logo"/></div>
+    <div class="logo"><img src="logo.png" alt="LWM logo"/></div>
     <div class="badge">ডিজিটাল মুক্তিযুদ্ধ জাদুঘর</div>
     <div id="splashTitle" class="title">স্বাগতম</div>
     <div class="subtitle">মুক্তিযুদ্ধের চেতনায় — বাংলাদেশের স্বাধীনতার স্মৃতি লালন করি</div>
@@ -279,7 +279,7 @@ userType.addEventListener('change', ()=>{
 loginBtn.addEventListener('click', ()=>{
   const type = userType.value;
   if(type === "admin"){
-    window.location.href = "draft.html";
+    window.location.href = "lwmdashboard.html";
   } else if(type === "visitor"){
     const splash = document.getElementById('loginSplash');
     if (splash) {
@@ -306,13 +306,13 @@ loginBtn.addEventListener('click', ()=>{
       const proceed = ()=> {
         if (rot) clearInterval(rot);
         if (redirectTimer) clearTimeout(redirectTimer);
-        window.location.href = "../home/home.html";
+        window.location.href = "pages/home/home.html";
       };
       splash.addEventListener('click', proceed, { once: true });
       setTimeout(startImages, 900); // ~0.9s of flag colors, then images
     } else {
       // Fallback: direct redirect if splash missing
-      window.location.href = "../home/home.html";
+      window.location.href = "pages/home/home.html";
     }
   } else {
     alert("Please select Admin or Visitor!");
