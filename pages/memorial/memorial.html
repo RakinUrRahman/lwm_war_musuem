@@ -1,3 +1,269 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Memorial Wall — LWM</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link rel="stylesheet" href="../../assets/css/lwm.css"><link rel="stylesheet" href="memorial.css"></head>
-<body><div class="app" id="app"><aside class="side" id="side"><div class="brand"><div class="logo">LWM</div><div><h1 style="font-size:20px">Digital Liberation War Museum</h1><div class="muted" style="font-size:13px">Honoring Bangladesh's History</div></div></div><nav id="nav"></nav></aside><div class="overlay" id="overlay"></div><main class="main"><div class="topbar"><div style="display:flex;gap:12px;align-items:center"><button class="btn" id="hamb"><i class="fas fa-bars"></i></button><div class="search"><i class="fas fa-search"></i><input id="globalSearch" placeholder="Search..."/><button class="btn" id="searchBtn">Search</button></div></div><div style="display:flex;gap:12px;align-items:center"><div id="userStatus" class="muted">Public Visitor</div><div style="width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600"><span id="userInitials">PV</span></div></div></div><section class="content" id="page"><div class="container py-4"><h2><i class="fas fa-monument me-2"></i>Memorial Wall</h2><p class="muted">Prototype page for honoring heroes.</p></div></section><footer>© <strong>Digital Liberation War Museum</strong> — Honoring the Sacrifices of 1971 • Prototype v2.0</footer></main></div><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script><script src="../../shared/core.js"></script><script src="memorial.js"></script></body></html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Memorial Wall — Digital Liberation War Museum</title>
+	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+	<link rel="stylesheet" href="../../assets/css/lwm.css">
+	<link rel="stylesheet" href="memorial.css">
+</head>
+<body>
+	<div class="app" id="app">
+		<aside class="side" id="side">
+			<div class="brand">
+				<div class="logo">LWM</div>
+				<div>
+					<h1 style="font-size:20px">Digital Liberation War Museum</h1>
+					<div class="muted" style="font-size:13px">Honoring Bangladesh's History</div>
+				</div>
+			</div>
+
+			<nav role="navigation" aria-label="Main menu" id="nav"></nav>
+
+			<div style="margin-top:28px">
+				<h4 style="margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+					<i class="fas fa-handshake"></i> Outreach & Connect
+				</h4>
+				<div class="muted" style="font-size:13px; margin-bottom:12px;">News • Programs • Social Media</div>
+				<div style="display:flex;gap:10px;margin-top:12px">
+					<a href="#" aria-label="YouTube" class="btn" style="padding:8px 12px;"><i class="fab fa-youtube"></i></a>
+					<a href="#" aria-label="Facebook" class="btn" style="padding:8px 12px;"><i class="fab fa-facebook-f"></i></a>
+					<a href="#" aria-label="Instagram" class="btn" style="padding:8px 12px;"><i class="fab fa-instagram"></i></a>
+				</div>
+			</div>
+
+			<div style="margin-top:28px" class="muted">
+				<h4 style="margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+					<i class="fas fa-universal-access"></i> Accessibility
+				</h4>
+				<div style="font-size:13px">Options for better viewing experience</div>
+				<div style="display:flex;gap:8px;margin-top:12px">
+					<button class="btn" id="contrastToggle" style="font-size:12px; padding:6px 10px;">
+						<i class="fas fa-adjust"></i> High Contrast
+					</button>
+					<button class="btn" id="textSizeToggle" style="font-size:12px; padding:6px 10px;">
+						<i class="fas fa-text-height"></i> Text Size
+					</button>
+					<button class="btn" id="darkModeToggle" style="font-size:12px; padding:6px 10px;">
+						<i class="fas fa-moon"></i> <span id="darkModeLabel">Dark Mode</span>
+					</button>
+					<select id="langSelect" class="btn" style="font-size:12px; padding:6px 10px;">
+						<option value="en">English</option>
+						<option value="bn">বাংলা</option>
+					</select>
+				</div>
+			</div>
+		</aside>
+
+		<div class="overlay" id="overlay"></div>
+
+		<main class="main">
+			<div class="topbar">
+				<div style="display:flex;align-items:center;gap:12px">
+					<button class="btn" id="hamb" aria-label="Toggle menu">
+						<i class="fas fa-bars"></i>
+					</button>
+					<div class="search" role="search">
+						<i class="fas fa-search" aria-hidden="true"></i>
+						<input id="globalSearch" placeholder="Search heroes, martyrs, tributes..." aria-label="Search"/>
+						<button class="btn" id="searchBtn" aria-label="Search button">Search</button>
+					</div>
+				</div>
+
+				<div style="display:flex;align-items:center;gap:12px">
+					<div id="userStatus" class="muted">Public Visitor</div>
+					<div style="width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:white;font-weight:600">
+						<span id="userInitials">PV</span>
+					</div>
+				</div>
+			</div>
+
+			<section class="content" id="page">
+				<div>
+					<!-- Memorial Header Section -->
+					<div class="hero">
+						<div class="hero-content">
+							<h2><i class="fas fa-monument"></i> Memorial Wall</h2>
+							<p class="muted">Honoring the brave souls who sacrificed their lives for Bangladesh's independence. Their courage, sacrifice, and ultimate gift of freedom shall never be forgotten.</p>
+							
+							<div class="stats">
+								<div class="stat">
+									<div class="number" style="color: var(--martyr-red);">3,000,000+</div>
+									<div class="muted">Martyrs</div>
+								</div>
+								<div class="stat">
+									<div class="number" style="color: var(--victory-gold);">200,000+</div>
+									<div class="muted">War Mothers</div>
+								</div>
+								<div class="stat">
+									<div class="number" style="color: var(--hope-green);">93,000</div>
+									<div class="muted">POWs</div>
+								</div>
+								<div class="stat">
+									<div class="number" style="color: var(--bangladesh-green);">10,000,000</div>
+									<div class="muted">Refugees</div>
+								</div>
+							</div>
+
+							<div style="margin-top:24px">
+								<button class="accent-btn" onclick="scrollToSection('heroes')">
+									<i class="fas fa-medal"></i> View Heroes
+								</button>
+								<button class="btn" style="margin-left:12px" onclick="scrollToSection('tributes')">
+									<i class="fas fa-heart"></i> Read Tributes
+								</button>
+							</div>
+						</div>
+						
+						<div class="hero-image">
+							<img src="../../logo.png" alt="Liberation War Memorial">
+						</div>
+					</div>
+
+					<!-- Memorial Flame Section -->
+					<div class="memorial-flame">
+						<div class="flame-container">
+							<div class="eternal-flame">
+								<i class="fas fa-fire"></i>
+							</div>
+							<h3>Eternal Flame of Freedom</h3>
+							<p class="muted">In memory of all who gave their lives for our independence</p>
+						</div>
+					</div>
+
+					<!-- Liberation War Heroes Section -->
+					<div class="section-title" id="heroes">
+						<i class="fas fa-medal"></i>
+						<h3>Liberation War Heroes</h3>
+					</div>
+					<div class="grid" id="heroesGrid">
+						<!-- Heroes will be loaded here -->
+					</div>
+
+					<!-- Martyrs Section -->
+					<div class="section-title">
+						<i class="fas fa-star"></i>
+						<h3>Renowned Martyrs</h3>
+					</div>
+					<div class="grid" id="martyrsGrid">
+						<!-- Martyrs will be loaded here -->
+					</div>
+
+					<!-- War Mothers Section -->
+					<div class="section-title">
+						<i class="fas fa-female"></i>
+						<h3>Birangona - The War Heroines</h3>
+					</div>
+					<div class="card" style="margin-bottom: 2rem;">
+						<h4>Honoring the Brave Women</h4>
+						<p>The women who endured unimaginable suffering during the liberation war, yet showed incredible courage and resilience. They are our national heroines - the Birangona.</p>
+						<div class="birangona-stats">
+							<div class="stat">
+								<div class="number" style="color: var(--victory-gold);">200,000+</div>
+								<div class="muted">Estimated affected women</div>
+							</div>
+							<div class="stat">
+								<div class="number" style="color: var(--hope-green);">Countless</div>
+								<div class="muted">Acts of bravery</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Tributes & Messages Section -->
+					<div class="section-title" id="tributes">
+						<i class="fas fa-heart"></i>
+						<h3>Tributes & Messages</h3>
+					</div>
+					<div class="tribute-wall">
+						<div class="grid" id="tributesGrid">
+							<!-- Tributes will be loaded here -->
+						</div>
+					</div>
+
+					<!-- Memorial Timeline -->
+					<div class="section-title">
+						<i class="fas fa-clock"></i>
+						<h3>Timeline of Sacrifice</h3>
+					</div>
+					<div class="timeline" id="memorialTimeline">
+						<!-- Timeline events will be loaded here -->
+					</div>
+
+					<!-- Interactive Memorial Map -->
+					<div class="section-title">
+						<i class="fas fa-map-marked-alt"></i>
+						<h3>Memorial Sites Across Bangladesh</h3>
+					</div>
+					<div class="map-container">
+						<div id="memorialMap" style="height: 500px; width: 100%; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);"></div>
+						<div class="map-legend">
+							<h4><i class="fas fa-info-circle"></i> Liberation War Sites Legend</h4>
+							<div class="legend-items">
+								<div class="legend-item">
+									<span class="legend-marker memorial"></span> Liberation War Memorials
+								</div>
+								<div class="legend-item">
+									<span class="legend-marker martyrs"></span> Martyrs Memorial Sites
+								</div>
+								<div class="legend-item">
+									<span class="legend-marker museum"></span> Liberation War Museums
+								</div>
+								<div class="legend-item">
+									<span class="legend-marker monument"></span> Liberation Monuments
+								</div>
+								<div class="legend-item">
+									<span class="legend-marker warsite"></span> War Sites/Battle Grounds
+								</div>
+								<div class="legend-item">
+									<span class="legend-marker victory"></span> Victory Sites
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Leave a Tribute Section -->
+					<div class="section-title">
+						<i class="fas fa-pen"></i>
+						<h3>Leave a Tribute</h3>
+					</div>
+					<div class="card">
+						<form id="tributeForm">
+							<label for="tributeName">Your Name</label>
+							<input type="text" id="tributeName" placeholder="Enter your name" required>
+							
+							<label for="tributeMessage">Your Message</label>
+							<textarea id="tributeMessage" rows="4" placeholder="Share your tribute, thoughts, or gratitude..." required></textarea>
+							
+							<label for="tributeCategory">Category</label>
+							<select id="tributeCategory">
+								<option value="general">General Tribute</option>
+								<option value="family">Family Member</option>
+								<option value="gratitude">Gratitude</option>
+								<option value="prayer">Prayer/Remembrance</option>
+								<option value="poem">Poem/Literary</option>
+							</select>
+							
+							<button type="submit" class="accent-btn">
+								<i class="fas fa-heart"></i> Submit Tribute
+							</button>
+						</form>
+					</div>
+				</div>
+			</section>
+
+			<footer>
+				© <strong>Digital Liberation War Museum</strong> — Honoring the Sacrifices of 1971 • Prototype v2.0
+			</footer>
+		</main>
+	</div>
+
+	<!-- Core functionality -->
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+	<script src="../../shared/core.js?v=2"></script>
+	<!-- Page-specific script -->
+	<script src="memorial.js"></script>
+</body>
+</html>
