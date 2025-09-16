@@ -1,3 +1,138 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Artifact Donations — LWM</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><link rel="stylesheet" href="../../assets/css/lwm.css"><link rel="stylesheet" href="donations.css"></head>
-<body><div class="app" id="app"><aside class="side" id="side"><div class="brand"><div class="logo">LWM</div><div><h1 style="font-size:20px">Digital Liberation War Museum</h1><div class="muted" style="font-size:13px">Honoring Bangladesh's History</div></div></div><nav id="nav"></nav></aside><div class="overlay" id="overlay"></div><main class="main"><div class="topbar"><div style="display:flex;gap:12px;align-items:center"><button class="btn" id="hamb"><i class="fas fa-bars"></i></button><div class="search"><i class="fas fa-search"></i><input id="globalSearch" placeholder="Search..."/><button class="btn" id="searchBtn">Search</button></div></div><div style="display:flex;gap:12px;align-items:center"><div id="userStatus" class="muted">Public Visitor</div><div style="width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600"><span id="userInitials">PV</span></div></div></div><section class="content" id="page"><div class="container py-4"><h2><i class="fas fa-donate me-2"></i>Artifact Donations</h2><p class="muted">Prototype page for donation submissions.</p></div></section><footer>© <strong>Digital Liberation War Museum</strong> — Honoring the Sacrifices of 1971 • Prototype v2.0</footer></main></div><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script><script src="../../shared/core.js"></script><script src="donations.js"></script></body></html>
+<body>
+	<div class="app" id="app">
+		<aside class="side" id="side">
+			<div class="brand"><div class="logo">LWM</div>
+				<div><h1 style="font-size:20px">Digital Liberation War Museum</h1><div class="muted" style="font-size:13px">Honoring Bangladesh's History</div></div>
+			</div>
+			<nav id="nav"></nav>
+		</aside>
+		<div class="overlay" id="overlay"></div>
+		<main class="main">
+			<div class="topbar">
+				<div style="display:flex;gap:12px;align-items:center"><button class="btn" id="hamb"><i class="fas fa-bars"></i></button>
+					<div class="search"><i class="fas fa-search"></i><input id="globalSearch" placeholder="Search..."/><button class="btn" id="searchBtn">Search</button></div>
+				</div>
+				<div style="display:flex;gap:12px;align-items:center"><div id="userStatus" class="muted">Public Visitor</div>
+					<div style="width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600"><span id="userInitials">PV</span></div>
+				</div>
+			</div>
+
+			<section class="content" id="page">
+				<div class="container py-4 donations-page">
+					<!-- Hero Banner -->
+					<div class="donations-hero">
+						<div class="hero-copy">
+							<div class="badge">Support the Mission</div>
+							<h2>Preserve 1971. Power the future.</h2>
+							<p class="muted">Your contribution helps digitize artifacts, conserve fragile items, and bring educational programs to students across Bangladesh.</p>
+						</div>
+						<div class="hero-stats">
+							<div class="stat"><span id="statArtifacts">0</span><small>Artifacts Digitized</small></div>
+							<div class="stat"><span id="statStudents">0</span><small>Students Reached</small></div>
+							<div class="stat"><span id="statEvents">0</span><small>Community Events</small></div>
+						</div>
+					</div>
+
+					<!-- Tabs -->
+					<div class="donations-tabs" role="tablist" aria-label="Donation options">
+						<button class="tab active" data-tab="give-money" role="tab" aria-selected="true"><i class="fas fa-hand-holding-heart"></i> Donate Funds</button>
+						<button class="tab" data-tab="give-artifact" role="tab" aria-selected="false"><i class="fas fa-archive"></i> Contribute an Artifact</button>
+					</div>
+
+					<!-- Monetary Donation Panel -->
+					<div class="tab-panel active" id="give-money" role="tabpanel">
+						<div class="donation-widget">
+							<div class="donation-left">
+								<label for="currency" class="label">Currency</label>
+								<select id="currency" class="input"><option value="BDT" selected>BDT ৳</option><option value="USD">USD $</option></select>
+
+								<label class="label">Quick amount</label>
+								<div class="chips" id="quickChips" role="group" aria-label="Quick amounts">
+									<button class="chip" data-amt="500">৳500</button>
+									<button class="chip" data-amt="1000">৳1,000</button>
+									<button class="chip" data-amt="2000">৳2,000</button>
+									<button class="chip" data-amt="5000">৳5,000</button>
+								</div>
+
+								<label for="amount" class="label">Choose amount</label>
+								<div class="amount-row">
+									<div class="amount-input">
+										<span class="prefix" id="currencyPrefix">৳</span>
+										<input id="amount" type="number" min="100" step="100" value="1000" aria-label="Donation amount"/>
+									</div>
+									<input id="amountRange" class="range" type="range" min="100" max="20000" step="100" value="1000" aria-label="Donation range"/>
+								</div>
+
+								<div class="options">
+									<label class="toggle"><input id="recurring" type="checkbox"/> <span>Make it a monthly donation</span></label>
+									<label class="toggle"><input id="anonymous" type="checkbox"/> <span>Give anonymously</span></label>
+								</div>
+
+								<button id="donateBtn" class="donate-btn"><i class="fas fa-heart"></i> Donate Now</button>
+								<div class="secure muted"><i class="fas fa-lock"></i> Secure & encrypted</div>
+							</div>
+
+							<div class="donation-right">
+								<div class="campaign">
+									<div class="campaign-head">
+										<strong>Digitization Campaign</strong>
+										<span class="goal">Goal: <b id="goalDisplay">৳200,000</b></span>
+									</div>
+									<div class="progress-wrap">
+										<div class="progress-bar"><div id="progressFill" class="fill" style="width:0%"></div></div>
+										<div class="progress-meta"><span id="raisedDisplay">৳0</span> raised • <span id="pctDisplay">0%</span></div>
+									</div>
+									<div class="impact">
+										<div class="impact-card"><i class="fas fa-clock"></i><div><b id="impactHours">0</b><small>Digitization hours</small></div></div>
+										<div class="impact-card"><i class="fas fa-toolbox"></i><div><b id="impactKits">0</b><small>Preservation kits</small></div></div>
+										<div class="impact-card"><i class="fas fa-user-graduate"></i><div><b id="impactStudents">0</b><small>Students impacted</small></div></div>
+									</div>
+								</div>
+
+								<div class="gratitude">
+									<div class="title"><i class="fas fa-seedling"></i> Wall of Gratitude</div>
+									<div id="gratitudeWall" class="bubbles" aria-live="polite"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Artifact Contribution Panel -->
+					<div class="tab-panel" id="give-artifact" role="tabpanel" aria-hidden="true">
+						<div class="artifact-card">
+							<div class="artifact-left">
+								<h3><i class="fas fa-archive me-2"></i>Contribute an Artifact</h3>
+								<p class="muted">Share photographs, letters, objects, or recordings from 1971. Our team will review and contact you for next steps.</p>
+								<div class="form-grid">
+									<input id="artifactTitle" class="input" placeholder="Artifact title"/>
+									<input id="artifactOwner" class="input" placeholder="Your name"/>
+									<textarea id="artifactDesc" class="input" rows="4" placeholder="Describe the artifact (year, story, condition)"></textarea>
+								</div>
+								<button id="artifactSubmit" class="secondary-btn"><i class="fas fa-paper-plane"></i> Submit Interest</button>
+								<div id="artifactThanks" class="muted" style="display:none;margin-top:8px">Thank you! We’ll reach out soon.</div>
+							</div>
+							<div class="artifact-right">
+								<div id="dropZone" class="dropzone" aria-label="Upload images">
+									<div class="dz-inner">
+										<i class="fas fa-cloud-upload-alt"></i>
+										<div>Drag & drop images here or click to browse</div>
+										<small class="muted">JPG, PNG, or WEBP • up to 5 files</small>
+									</div>
+									<input id="fileInput" type="file" accept="image/*" multiple hidden />
+								</div>
+								<div id="previews" class="previews" aria-live="polite"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<footer>© <strong>Digital Liberation War Museum</strong> — Honoring the Sacrifices of 1971 • Prototype v2.0</footer>
+		</main>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="../../shared/core.js"></script>
+	<script src="donations.js"></script>
+</body></html>

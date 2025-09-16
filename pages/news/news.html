@@ -94,13 +94,45 @@
 						<p class="muted">Latest announcements, program reports, and press releases from the Liberation War Museum.</p>
 					</div>
           
-					<div class="news-filters">
+					<!-- Breaking news ticker -->
+					<div class="breaking-ticker" id="breakingTicker" aria-live="polite" aria-label="Breaking news ticker">
+						<div class="ticker-track" id="tickerTrack">
+							<!-- Populated by news.js -->
+						</div>
+					</div>
+          
+					<div class="news-filters" id="newsFilters">
 						<button class="btn active" data-filter="all">All News</button>
 						<button class="btn" data-filter="announcements">Announcements</button>
 						<button class="btn" data-filter="programs">Programs</button>
 						<button class="btn" data-filter="exhibitions">Exhibitions</button>
-						<button class="btn" data-filter="press">Press Releases</button>
+						<button class="btn" data-filter="press-releases">Press Releases</button>
+						<button class="btn" data-filter="news">News</button>
+						<button class="btn" data-filter="bookmarks"><i class="fas fa-bookmark me-1"></i> Bookmarked</button>
 					</div>
+
+					<!-- Search and tools -->
+					<div class="news-toolbar">
+						<div class="news-search">
+							<i class="fas fa-search" aria-hidden="true"></i>
+							<input id="newsSearchInput" type="search" placeholder="Search news, authors, topics..." aria-label="Search news" />
+							<button class="btn" id="clearSearchBtn" aria-label="Clear search" title="Clear"><i class="fas fa-xmark"></i></button>
+						</div>
+						<div class="news-tools">
+							<button class="btn" id="toggleViewBtn" aria-pressed="false" title="Toggle compact view">
+								<i class="fas fa-grip"></i>
+							</button>
+						</div>
+					</div>
+
+					<!-- Featured slider -->
+					<section class="featured-news" id="featuredNews" aria-label="Featured news">
+						<button class="featured-nav prev" id="featuredPrev" aria-label="Previous featured"><i class="fas fa-chevron-left"></i></button>
+						<div class="featured-track" id="featuredTrack">
+							<!-- Featured cards injected here -->
+						</div>
+						<button class="featured-nav next" id="featuredNext" aria-label="Next featured"><i class="fas fa-chevron-right"></i></button>
+					</section>
           
 					<div class="grid" id="newsGrid">
 						<!-- News cards will be loaded here -->
@@ -122,5 +154,32 @@
 	<script src="../../shared/core.js?v=2"></script>
 	<!-- Page-specific script -->
 	<script src="news.js"></script>
+
+	<!-- News Detail Modal -->
+	<div class="news-modal" id="newsModal" role="dialog" aria-modal="true" aria-labelledby="modalNewsTitle" aria-hidden="true">
+		<div class="news-modal-content">
+			<div class="news-modal-header">
+				<h3 id="modalNewsTitle" class="modal-title"></h3>
+				<div class="modal-actions">
+					<button class="btn" id="decreaseFont" title="Decrease text size" aria-label="Decrease text size"><i class="fas fa-minus"></i></button>
+					<button class="btn" id="increaseFont" title="Increase text size" aria-label="Increase text size"><i class="fas fa-plus"></i></button>
+					<button class="btn" id="shareNewsBtn" title="Share" aria-label="Share"><i class="fas fa-share-nodes"></i></button>
+					<button class="close-modal" onclick="closeNewsModal()" aria-label="Close"><i class="fas fa-times"></i></button>
+				</div>
+				<div class="read-progress" aria-hidden="true"><div class="read-progress-bar" id="readProgress"></div></div>
+			</div>
+			<div class="news-modal-body" id="modalNewsContent"></div>
+			<div class="news-modal-footer">
+				<div class="modal-nav">
+					<button class="btn" id="modalPrev" aria-label="Previous article"><i class="fas fa-chevron-left me-1"></i>Prev</button>
+					<button class="btn" id="modalNext" aria-label="Next article">Next<i class="fas fa-chevron-right ms-1"></i></button>
+				</div>
+				<div class="modal-quick-actions">
+					<button class="btn" id="modalLike" aria-label="Like"><i class="fas fa-heart"></i> <span id="modalLikeCount">0</span></button>
+					<button class="btn" id="modalBookmark" aria-label="Bookmark"><i class="fas fa-bookmark"></i> <span id="modalBookmarkLabel">Save</span></button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
