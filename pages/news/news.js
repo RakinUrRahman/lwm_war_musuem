@@ -26,7 +26,7 @@ function loadNewsData() {
 function generateNewsData() {
   const newsTypes = [
     'announcements',
-    'programs', 
+    'programs',
     'exhibitions',
     'press-releases',
     'news'
@@ -97,19 +97,19 @@ function generateNewsData() {
 // Setup news filters
 function setupNewsFilters() {
   const filterButtons = document.querySelectorAll('.news-filters .btn');
-  
+
   filterButtons.forEach(button => {
     button.addEventListener('click', () => {
       // Remove active class from all buttons
       filterButtons.forEach(btn => btn.classList.remove('active'));
-      
+
       // Add active class to clicked button
       button.classList.add('active');
-      
+
       // Update current filter
       currentNewsFilter = button.dataset.filter;
       currentNewsPage = 1; // Reset to first page
-      
+
       // Re-render news
       renderNews();
       updatePagination();
@@ -137,7 +137,7 @@ function getPaginatedNews() {
 function renderNews() {
   const newsGrid = document.getElementById('newsGrid');
   const paginatedNews = getPaginatedNews();
-  
+
   if (paginatedNews.length === 0) {
     newsGrid.innerHTML = `
       <div class="col-12 text-center">
@@ -146,11 +146,11 @@ function renderNews() {
     `;
     return;
   }
-  
-  newsGrid.innerHTML = paginatedNews.map(news => 
+
+  newsGrid.innerHTML = paginatedNews.map(news =>
     newsCard(news, true) // true for detailed view
   ).join('');
-  
+
   // Add click listeners for read more buttons
   newsGrid.querySelectorAll('.read-more-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -196,11 +196,11 @@ function newsCard(news, detailed = false) {
 function showNewsModal(newsId) {
   const news = allNewsData.find(n => n.id === newsId);
   if (!news) return;
-  
+
   const modal = document.getElementById('newsModal');
   const modalTitle = document.getElementById('modalNewsTitle');
   const modalContent = document.getElementById('modalNewsContent');
-  
+
   modalTitle.textContent = news.title;
   modalContent.innerHTML = `
     <div class="news-image mb-3" style="background-image: url('${news.image}'); height: 300px;"></div>
@@ -211,7 +211,7 @@ function showNewsModal(newsId) {
     </div>
     ${news.content}
   `;
-  
+
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -226,7 +226,7 @@ function closeNewsModal() {
 // Setup pagination
 function setupPagination() {
   updatePagination();
-  
+
   // Add click listeners for pagination buttons
   document.addEventListener('click', (e) => {
     if (e.target.classList.contains('page-btn')) {
@@ -235,14 +235,14 @@ function setupPagination() {
         currentNewsPage = page;
         renderNews();
         updatePagination();
-        
+
         // Scroll to top of news section
-        document.querySelector('.page-header').scrollIntoView({ 
-          behavior: 'smooth' 
+        document.querySelector('.page-header').scrollIntoView({
+          behavior: 'smooth'
         });
       }
     }
-    
+
     if (e.target.classList.contains('prev-btn')) {
       if (currentNewsPage > 1) {
         currentNewsPage--;
@@ -250,7 +250,7 @@ function setupPagination() {
         updatePagination();
       }
     }
-    
+
     if (e.target.classList.contains('next-btn')) {
       const totalPages = Math.ceil(getFilteredNews().length / newsPerPage);
       if (currentNewsPage < totalPages) {
@@ -267,18 +267,18 @@ function updatePagination() {
   const filteredNews = getFilteredNews();
   const totalPages = Math.ceil(filteredNews.length / newsPerPage);
   const paginationContainer = document.getElementById('newsPagination');
-  
+
   if (totalPages <= 1) {
     paginationContainer.innerHTML = '';
     return;
   }
-  
+
   let paginationHTML = `
     <button class="btn prev-btn" ${currentNewsPage === 1 ? 'disabled' : ''}>
       <i class="fas fa-chevron-left"></i>
     </button>
   `;
-  
+
   // Show page numbers
   for (let i = 1; i <= totalPages; i++) {
     if (i === 1 || i === totalPages || (i >= currentNewsPage - 2 && i <= currentNewsPage + 2)) {
@@ -291,13 +291,13 @@ function updatePagination() {
       paginationHTML += `<span class="pagination-dots">...</span>`;
     }
   }
-  
+
   paginationHTML += `
     <button class="btn next-btn" ${currentNewsPage === totalPages ? 'disabled' : ''}>
       <i class="fas fa-chevron-right"></i>
     </button>
   `;
-  
+
   paginationContainer.innerHTML = paginationHTML;
 }
 
@@ -333,6 +333,31 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   initializeNewsPage();
 });
+// dd
+/* ===== Newsletter (front-end only) ===== */
+(function () {
+  const btn = document.getElementById('nlSubscribe');
+  const inp = document.getElementById('nlEmail');
+  const msg = document.getElementById('nlMsg');
+
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const email = inp.value && inp.value.trim();
+      if (!email || email.indexOf('@') === -1) {
+        msg.textContent = 'Please enter a valid email address.';
+        msg.style.color = 'crimson';
+        return;
+      }
+      const listKey = 'lwm_newsletter';
+      const list = JSON.parse(localStorage.getItem(listKey) || '[]');
+      if (!list.includes(email)) list.push(email);
+      localStorage.setItem(listKey, JSON.stringify(list));
+      msg.textContent = 'Thanks — subscribed (saved locally).';
+      msg.style.color = 'green';
+      inp.value = '';
+    });
+  }
+})();
 
 // Make functions available globally for modal
 window.closeNewsModal = closeNewsModal;

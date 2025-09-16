@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Community — Digital Liberation War Museum</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../../assets/css/lwm.css">
+    <link rel="stylesheet" href="community.css">
+</head>
+
+<body>
+    <div class="app" id="app">
+
+        <!-- Sidebar -->
+        <aside class="side" id="side">
+            <div class="brand">
+                <div class="logo">LWM</div>
+                <div class="first-ham">
+                    <h1 style="font-size:20px">Digital Liberation War Museum</h1>
+                    <div class="muted" style="font-size:13px">Honoring Bangladesh's History</div>
+                </div>
+            </div>
+
+            <nav role="navigation" aria-label="Main menu" id="nav">
+                <a href="../index.html" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="../news.html" class="nav-link"><i class="fas fa-newspaper"></i> News</a>
+                <a href="../education.html" class="nav-link"><i class="fas fa-graduation-cap"></i>
+                    Education</a>
+                <a href="community.html" class="nav-link active"><i class="fas fa-hands-helping"></i> Community</a>
+            </nav>
+
+            <div style="margin-top:28px">
+                <h4 style="margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+                    <i class="fas fa-handshake"></i> Outreach & Connect
+                </h4>
+                <div class="muted" style="font-size:13px; margin-bottom:12px;">News • Programs • Social Media</div>
+                <div style="display:flex;gap:10px;margin-top:12px">
+                    <a href="#" aria-label="YouTube" class="btn"><i class="fab fa-youtube"></i></a>
+                    <a href="#" aria-label="Facebook" class="btn"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram" class="btn"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <div style="margin-top:28px" class="muted">
+                <h4 style="margin-bottom:8px; display:flex; align-items:center; gap:8px;">
+                    <i class="fas fa-universal-access"></i> Accessibility
+                </h4>
+                <div style="font-size:13px">Options for better viewing experience</div>
+                <div style="display:flex;gap:8px;margin-top:12px">
+                    <button class="btn" id="contrastToggle"><i class="fas fa-adjust"></i> High Contrast</button>
+                    <button class="btn" id="textSizeToggle"><i class="fas fa-text-height"></i> Text Size</button>
+                    <button class="btn" id="darkModeToggle"><i class="fas fa-moon"></i> <span id="darkModeLabel">Dark
+                            Mode</span></button>
+                    <select id="langSelect" class="btn">
+                        <option value="en">English</option>
+                        <option value="bn">বাংলা</option>
+                    </select>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Overlay -->
+        <div class="overlay " id="overlay"></div>
+
+        <!-- Main Content -->
+        <main class="main">
+            <header class="header">
+                <h2 id="hamb">
+                    </button>
+
+
+            </header>
+            <div class="topbar">
+                <div style="display:flex;align-items:center;gap:12px">
+                    <button class="btn" id="hamb" aria-label="Toggle menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="search" role="search">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                        <input id="globalSearch" placeholder="Search artifacts, stories, memorials..."
+                            aria-label="Search" />
+                        <button class="btn" id="searchBtn" aria-label="Search button">Search</button>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px">
+                    <div id="userStatus" class="muted">Public Visitor</div>
+                    <div
+                        style="width:40px;height:40px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:white;font-weight:600">
+                        <span id="userInitials">PV</span>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 20px;">
+                <h1 style="margin-left: 30px;"><i class="fas fa-hands-helping"></i> Community Participation
+                </h1>
+                <p style="margin-left: 30px;" class="muted">Volunteer, intern, or sponsor an artifact.</p>
+
+            </div>
+
+            <section class="content">
+
+                <!-- Volunteer Card -->
+                <div class="card">
+                    <h3>Volunteering Opportunities</h3>
+                    <p>Roles available: Guide, Digital Archivist, Translator, Event Helper.</p>
+
+                    <form id="volForm" onsubmit="return false;" style="display:grid;gap:8px;max-width:720px">
+                        <input id="volName" placeholder="Full name" required>
+                        <input id="volEmail" placeholder="Email" type="email" required>
+                        <select id="volRole">
+                            <option value="Guide">Guide (on-site)</option>
+                            <option value="Digital Archivist">Digital Archivist</option>
+                            <option value="Translator">Translator</option>
+                            <option value="Event Helper">Event Helper</option>
+                        </select>
+                        <textarea id="volNote" placeholder="Tell us why you'd like to volunteer" rows="4"></textarea>
+                        <div style="display:flex;gap:8px">
+                            <button id="volSubmit" class="btn">Submit Application</button>
+                            <button id="volClear" class="btn-ghost" type="button">Clear</button>
+                        </div>
+                        <div id="volMsg" class="muted"></div>
+                    </form>
+                </div>
+
+                <!-- Internship Card -->
+                <div class="card">
+                    <h3>Internships & Student Engagement</h3>
+                    <p>We offer short-term digital internships for students (history, IT, museum studies).</p>
+                    <a href="#intern-apply" class="btn-ghost">Apply as Intern</a>
+                </div>
+
+                <!-- Adopt Artifact Card -->
+                <div class="card">
+                    <h3>Adopt an Artifact</h3>
+                    <p>Sponsor restoration or digitization. Sponsors are acknowledged on the artifact page.</p>
+
+                    <div class="artifact-list" id="artifactList"></div>
+                    <div id="adoptMsg" class="muted" style="margin-top:10px;"></div>
+                </div>
+
+            </section>
+
+            <footer>© Digital Liberation War Museum</footer>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../shared/core.js"></script>
+    <script src="community.js"></script>
+</body>
+
+</html>

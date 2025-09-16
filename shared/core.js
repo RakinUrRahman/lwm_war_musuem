@@ -159,26 +159,28 @@ function byId(id) { return document.getElementById(id) }
 
 // === Navigation ===
 const MENU_ITEMS = [
-  {id: 'home', label: 'Home', icon: 'fas fa-home'},
-  {id: 'news', label: 'News & Updates', icon: 'fas fa-newspaper'},
-  {id: 'programs', label: 'Programs & Events', icon: 'fas fa-calendar-alt'},
-  {id: 'explore', label: 'Explore Artifacts', icon: 'fas fa-archive'},
-  {id: 'timeline', label: 'Historical Timeline', icon: 'fas fa-history'},
-  {id: 'virtual-tour', label: 'Virtual Tour', icon: 'fas fa-vr-cardboard'},
-  {id: 'media', label: 'Media Library', icon: 'fas fa-photo-video'},
-  {id: 'education', label: 'Education Portal', icon: 'fas fa-graduation-cap'},
-  {id: 'archive', label: 'Archive System', icon: 'fas fa-book'},
-  {id: 'stories', label: 'Citizen Stories', icon: 'fas fa-book-open'},
-  {id: 'memorial', label: 'Memorial Wall', icon: 'fas fa-monument'},
-  {id: 'map', label: 'Map of Memory', icon: 'fas fa-map-marked-alt'},
-  {id: 'ticket', label: 'Book Visit', icon: 'fas fa-ticket-alt'},
-  {id: 'login', label: 'Login / Register', icon: 'fas fa-user', roles: ['visitor']},
-  {id: 'profile', label: 'My Profile', icon: 'fas fa-user-circle', roles: ['user', 'manager', 'admin']},
-  {id: 'favorites', label: 'My Favorites', icon: 'fas fa-heart', roles: ['user', 'manager', 'admin']},
-  {id: 'manager', label: 'Manager Dashboard', icon: 'fas fa-tachometer-alt', roles: ['manager', 'admin']},
-  {id: 'committee', label: 'Committee Management', icon: 'fas fa-users', roles: ['manager', 'admin']},
-  {id: 'donations', label: 'Artifact Donations', icon: 'fas fa-donate', roles: ['manager', 'admin']},
-  {id: 'logout', label: 'Logout', icon: 'fas fa-sign-out-alt', roles: ['user', 'manager', 'admin']}
+  { id: 'home', label: 'Home', icon: 'fas fa-home' },
+  { id: 'news', label: 'News & Updates', icon: 'fas fa-newspaper' },
+  { id: 'programs', label: 'Programs & Events', icon: 'fas fa-calendar-alt' },
+  { id: 'community', label: 'Community', icon: 'fas fa-hands-helping' },
+  { id: 'explore', label: 'Explore Artifacts', icon: 'fas fa-archive' },
+  { id: 'timeline', label: 'Historical Timeline', icon: 'fas fa-history' },
+  { id: 'virtual-tour', label: 'Virtual Tour', icon: 'fas fa-vr-cardboard' },
+  { id: 'media', label: 'Media Library', icon: 'fas fa-photo-video' },
+  { id: 'education', label: 'Education Portal', icon: 'fas fa-graduation-cap' },
+  { id: 'engagement', label: 'Engagement & Students', icon: 'fas fa-user-graduate' },
+  { id: 'archive', label: 'Archive System', icon: 'fas fa-book' },
+  { id: 'stories', label: 'Citizen Stories', icon: 'fas fa-book-open' },
+  { id: 'memorial', label: 'Memorial Wall', icon: 'fas fa-monument' },
+  { id: 'map', label: 'Map of Memory', icon: 'fas fa-map-marked-alt' },
+  { id: 'ticket', label: 'Book Visit', icon: 'fas fa-ticket-alt' },
+  { id: 'login', label: 'Login / Register', icon: 'fas fa-user', roles: ['visitor'] },
+  { id: 'profile', label: 'My Profile', icon: 'fas fa-user-circle', roles: ['user', 'manager', 'admin'] },
+  { id: 'favorites', label: 'My Favorites', icon: 'fas fa-heart', roles: ['user', 'manager', 'admin'] },
+  { id: 'manager', label: 'Manager Dashboard', icon: 'fas fa-tachometer-alt', roles: ['manager', 'admin'] },
+  { id: 'committee', label: 'Committee Management', icon: 'fas fa-users', roles: ['manager', 'admin'] },
+  { id: 'donations', label: 'Artifact Donations', icon: 'fas fa-donate', roles: ['manager', 'admin'] },
+  { id: 'logout', label: 'Logout', icon: 'fas fa-sign-out-alt', roles: ['user', 'manager', 'admin'] }
 ]
 
 // Expose menu items globally to avoid load-order/scoping issues
@@ -197,7 +199,7 @@ function renderMenu() {
     console.error('[LWM] MENU_ITEMS missing or invalid — menu will not be rendered')
     return
   }
-  
+
   items.forEach(it => {
     if (it.roles && !it.roles.includes(role)) return
     if (!it.roles || it.roles.includes(role) || role === 'visitor' && !it.roles) {
@@ -212,19 +214,19 @@ function renderMenu() {
       nav.appendChild(el)
     }
   })
-  
+
   // Demo role selector for testing
   const hr = document.createElement('hr')
   hr.style.margin = '16px 0'
   nav.appendChild(hr)
-  
+
   const rs = document.createElement('div')
   rs.innerHTML = `<div class="muted" style="font-size:13px; margin-bottom:8px;">Demo Role Selection</div>`
   const roleButtons = document.createElement('div')
   roleButtons.style.display = 'flex'
   roleButtons.style.flexWrap = 'wrap'
   roleButtons.style.gap = '6px'
-  
+
   const roles = ['visitor', 'user', 'manager', 'admin']
   roles.forEach(r => {
     const b = document.createElement('button')
@@ -235,7 +237,7 @@ function renderMenu() {
     b.addEventListener('click', () => setRole(r))
     roleButtons.appendChild(b)
   })
-  
+
   rs.appendChild(roleButtons)
   nav.appendChild(rs)
 }
@@ -266,7 +268,7 @@ function setRole(r) {
 function updateUserUI() {
   const userStatus = byId('userStatus')
   const userInitials = byId('userInitials')
-  
+
   if (state.user) {
     userStatus.textContent = state.user.name
     userInitials.textContent = state.user.initials
@@ -279,13 +281,13 @@ function updateUserUI() {
 // === Search Functionality ===
 function performSearch(q) {
   if (!q) return navigate('explore')
-  
-  const matches = state.artifacts.filter(a => 
-    a.title.toLowerCase().includes(q) || 
+
+  const matches = state.artifacts.filter(a =>
+    a.title.toLowerCase().includes(q) ||
     a.origin.toLowerCase().includes(q) ||
     a.description.toLowerCase().includes(q)
   )
-  
+
   window.location.href = `../explore/explore.html?search=${encodeURIComponent(q)}`
 }
 
@@ -295,7 +297,7 @@ function toggleFav(id) {
     navigate('login')
     return
   }
-  
+
   const index = state.favorites.indexOf(id)
   if (index > -1) {
     state.favorites.splice(index, 1)
@@ -303,7 +305,7 @@ function toggleFav(id) {
     state.favorites.push(id)
   }
   localStorage.setItem('lwm_favorites', JSON.stringify(state.favorites))
-  
+
   // Refresh the current page if needed
   if (typeof refreshFavorites === 'function') {
     refreshFavorites()
@@ -315,7 +317,7 @@ function generateArtifacts(n) {
   const arr = []
   const types = ['Document', 'Photograph', 'Weapon', 'Personal Item', 'Uniform', 'Medal']
   const origins = ['Dhaka', 'Chittagong', 'Khulna', 'Rajshahi', 'Sylhet', 'Barisal', 'Rangpur', 'Mymensingh']
-  
+
   for (let i = 1; i <= n; i++) {
     arr.push({
       id: i,
@@ -336,7 +338,7 @@ function generateArtifacts(n) {
 function generateStories(n) {
   const s = []
   const authors = ['Ahmed Khan', 'Fatima Begum', 'Abdul Rahman', 'Sultana Ahmed', 'Mohammad Hassan', 'Ayesha Choudhury']
-  
+
   for (let i = 1; i <= n; i++) {
     s.push({
       id: i,
@@ -352,7 +354,7 @@ function generateMemorials(n) {
   const m = []
   const roles = ['Freedom Fighter', 'Civilian Volunteer', 'Student Leader', 'Medical Worker', 'Journalist']
   const regions = ['Dhaka', 'Chittagong', 'Khulna', 'Rajshahi', 'Sylhet', 'Barisal']
-  
+
   for (let i = 1; i <= n; i++) {
     m.push({
       id: i,
@@ -368,7 +370,7 @@ function generateMemorials(n) {
 function generateMedia(n) {
   const m = []
   const types = ['Video', 'Audio', 'Photograph']
-  
+
   for (let i = 1; i <= n; i++) {
     m.push({
       id: i,
@@ -397,7 +399,7 @@ function generateNews(n) {
 function generateEvents(n) {
   const e = []
   const types = ['Exhibition', 'Workshop', 'Seminar', 'Memorial Ceremony', 'Educational Program']
-  
+
   for (let i = 1; i <= n; i++) {
     e.push({
       id: i,
@@ -414,7 +416,7 @@ function generateEvents(n) {
 function generateTimeline(n) {
   const e = []
   const locations = ['Dhaka', 'Chittagong', 'Khulna', 'Rajshahi', 'Sylhet', 'Barisal', 'Rangpur', 'Mymensingh']
-  
+
   for (let i = 0; i < n; i++) {
     e.push({
       date: `1971-${(i % 12) + 1}-${(i % 28) + 1}`,
@@ -525,11 +527,11 @@ function memorialCard(m) {
 // === Core Initialization ===
 function initializeCore() {
   console.log('initializeCore called');
-  
+
   // Wait a bit for all elements to be ready
   setTimeout(() => {
     // Manual test to check if sidebar works
-    window.testSidebar = function() {
+    window.testSidebar = function () {
       const side = document.getElementById('side');
       const overlay = document.getElementById('overlay');
       if (side && overlay) {
@@ -543,7 +545,7 @@ function initializeCore() {
         }, 2000);
       }
     };
-    
+
     // Hamburger menu
     const hamb = byId('hamb');
     if (hamb) {
@@ -569,13 +571,13 @@ function initializeCore() {
   // Search functionality
   const globalSearch = byId('globalSearch');
   const searchBtn = byId('searchBtn');
-  
+
   if (globalSearch) {
-    globalSearch.addEventListener('keypress', e => { 
-      if (e.key === 'Enter') { 
+    globalSearch.addEventListener('keypress', e => {
+      if (e.key === 'Enter') {
         const q = globalSearch.value.toLowerCase();
         performSearch(q);
-      } 
+      }
     })
   }
 
@@ -589,15 +591,15 @@ function initializeCore() {
   // Accessibility controls
   const contrastToggle = byId('contrastToggle');
   if (contrastToggle) {
-    contrastToggle.addEventListener('click', () => { 
-      document.body.classList.toggle('high-contrast') 
+    contrastToggle.addEventListener('click', () => {
+      document.body.classList.toggle('high-contrast')
     })
   }
 
   const textSizeToggle = byId('textSizeToggle');
   if (textSizeToggle) {
-    textSizeToggle.addEventListener('click', () => { 
-      alert(currentLang === 'bn' ? 'টেক্সট সাইজ অপশন এখানে আসবে' : 'Text size options would appear here') 
+    textSizeToggle.addEventListener('click', () => {
+      alert(currentLang === 'bn' ? 'টেক্সট সাইজ অপশন এখানে আসবে' : 'Text size options would appear here')
     })
   }
 
@@ -618,8 +620,8 @@ function initializeCore() {
   }
 
   // Restore dark mode
-  if (localStorage.getItem('lwm_dark') === '1') { 
-    document.body.classList.add('dark-mode'); 
+  if (localStorage.getItem('lwm_dark') === '1') {
+    document.body.classList.add('dark-mode');
   }
 
   // Initial render
@@ -647,7 +649,7 @@ document.addEventListener('click', (e) => {
   } else if (e.target.closest) {
     hambBtn = e.target.closest('#hamb');
   }
-  
+
   if (hambBtn) {
     e.preventDefault();
     e.stopPropagation();
@@ -705,7 +707,7 @@ function readStory(id) { alert(`Read story ${id}`) }
 function viewMemorial(id) { alert(`View memorial ${id}`) }
 
 // Initialize core functionality when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   console.log('Core.js initializing...');
   initializeCore();
 });

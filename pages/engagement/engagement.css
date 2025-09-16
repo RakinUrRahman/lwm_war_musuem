@@ -1,0 +1,36 @@
+/* engagement.css - page specific tweaks */
+.competition-list .card {
+    min-height: 140px;
+}
+
+.page-header h2 {
+    margin-bottom: 6px;
+}
+
+.page-header .lead {
+    margin-bottom: 18px;
+    color: var(--muted);
+}
+
+#pollResult {
+    font-weight: 600;
+    color: var(--green);
+    margin-top: 8px;
+}
+
+#heritageInput {
+    width: 100%;
+}
+
+#heritageList {
+    background: rgba(230, 235, 255, 0.6);
+    padding: 10px;
+    border-radius: 6px;
+}
+
+/* small-screen adjustments */
+@media (max-width: 768px) {
+    .competition-list .col-md-4 {
+        margin-bottom: 12px;
+    }
+}

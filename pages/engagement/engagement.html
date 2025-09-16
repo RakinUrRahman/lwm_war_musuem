@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Engagement & Student Corner - Liberation War Museum</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome & Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap">
+
+    <!-- Main site CSS -->
+    <link rel="stylesheet" href="../../assets/css/lwm.css">
+
+    <!-- Page-specific CSS -->
+    <link rel="stylesheet" href="engagement.css">
+</head>
+
+<body>
+    <div class="app" id="app">
+        <!-- Sidebar -->
+        <aside class="side" id="side">
+            <div class="brand">
+                <div class="logo">LWM</div>
+                <div>
+                    <h1 style="font-size:20px">Digital Liberation War Museum</h1>
+                    <div class="muted" style="font-size:13px">Honoring Bangladesh's History</div>
+                </div>
+            </div>
+            <nav role="navigation" aria-label="Main menu" id="nav"></nav>
+            <div style="margin-top:28px">
+                <h4 style="margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+                    <i class="fas fa-handshake"></i> Outreach & Connect
+                </h4>
+                <div class="muted" style="font-size:13px; margin-bottom:12px;">News • Programs • Social Media</div>
+            </div>
+        </aside>
+
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="topbar">
+                <button id="hamb" class="btn">☰</button>
+                <div class="search">
+                    <input id="globalSearch" placeholder="Search artifacts, stories..." />
+                    <button id="searchBtn" class="btn"><i class="fas fa-search"></i></button>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px">
+                    <div id="userStatus" class="muted">Public Visitor</div>
+                    <div
+                        style="width:40px;height:40px;border-radius:50%;background:#006a4e;display:flex;align-items:center;justify-content:center;color:white;font-weight:600">
+                        <span id="userInitials">PV</span>
+                    </div>
+                </div>
+            </div>
+
+            <section class="content" id="page">
+                <div class="container">
+                    <div class="page-header">
+                        <h2><i class="fas fa-user-graduate"></i> Interactive & Student Engagement</h2>
+                        <p class="lead">Competitions, polls, student resources and the Heritage Challenge.</p>
+                    </div>
+
+                    <!-- COMPETITIONS -->
+                    <div class="card mb-3 p-3">
+                        <h4><i class="fas fa-trophy"></i> Online Competitions</h4>
+                        <div class="row competition-list">
+                            <div class="col-md-4">
+                                <div class="card p-3">
+                                    <h5>Essay Competition</h5>
+                                    <p>Theme: "Voices of 1971"</p>
+                                    <button class="btn" data-type="Essay">Participate</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card p-3">
+                                    <h5>Digital Art / Poster</h5>
+                                    <p>Create posters inspired by Liberation War history.</p>
+                                    <button class="btn" data-type="Art">Participate</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card p-3">
+                                    <h5>Quiz Competition</h5>
+                                    <p>Test your knowledge of 1971.</p>
+                                    <button id="startQuiz" class="btn">Start Quiz</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- QUIZ (expanded) -->
+                    <div class="card mb-3 p-3">
+                        <h4><i class="fas fa-question-circle"></i> Quiz Competition</h4>
+                        <p>Test your knowledge of 1971. Answer all questions before the timer ends!</p>
+                        <div id="quizContainer" class="mt-2">
+                            <div class="quiz-question" id="questionBox"></div>
+                            <div id="optionsBox"></div>
+                            <button id="nextQuestion" class="btn mt-2">Next</button>
+                            <div id="quizScore" class="mt-3 fw-bold"></div>
+                        </div>
+                    </div>
+
+                    <!-- POLLS -->
+                    <div class="card mb-3 p-3">
+                        <h4><i class="fas fa-poll"></i> User Polls & Surveys</h4>
+                        <form id="pollForm">
+                            <p>Which exhibit do you like most?</p>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="vote" id="exA" value="Exhibit A">
+                                <label class="form-check-label" for="exA">Exhibit A</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="vote" id="exB" value="Exhibit B">
+                                <label class="form-check-label" for="exB">Exhibit B</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="vote" id="exC" value="Exhibit C">
+                                <label class="form-check-label" for="exC">Exhibit C</label>
+                            </div>
+                            <button type="submit" class="btn mt-2">Vote</button>
+                        </form>
+                        <div id="pollResult" class="mt-2">
+                            <canvas id="pollChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- STUDENT CORNER -->
+                    <div class="card mb-3 p-3">
+                        <h4><i class="fas fa-book-reader"></i> Student Corner</h4>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card p-3 text-center">
+                                    <i class="fas fa-file-pdf fa-2x text-danger"></i>
+                                    <h6>Liberation War Timeline</h6>
+                                    <a href="#" class="btn btn-sm btn-outline-primary">Download PDF</a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card p-3 text-center">
+                                    <i class="fas fa-headphones fa-2x text-success"></i>
+                                    <h6>Historical Speeches</h6>
+                                    <a href="#" class="btn btn-sm btn-outline-primary">Listen Audio</a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card p-3 text-center">
+                                    <i class="fas fa-video fa-2x text-info"></i>
+                                    <h6>Virtual Museum Tour</h6>
+                                    <a href="#" class="btn btn-sm btn-outline-primary">Watch Video</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GAMES -->
+                    <div class="card mb-3 p-3">
+                        <h4><i class="fas fa-gamepad"></i> Interactive Games</h4>
+                        <button id="guessArtifact" class="btn">Guess the Artifact</button>
+                        <button id="timelineBuilder" class="btn">Timeline Builder</button>
+                    </div>
+
+                    <!-- HERITAGE -->
+                    <div class="card mb-3 p-3">
+                        <h4><i class="fas fa-users"></i> Heritage Challenge</h4>
+                        <p>Collect & submit oral histories from your family elders.</p>
+                        <textarea id="heritageInput" class="form-control" placeholder="Write your story here..."
+                            rows="4"></textarea>
+                        <button id="submitHeritage" class="btn mt-2">Submit Story</button>
+                        <div id="heritageList" class="mt-3"></div>
+                    </div>
+                </div>
+            </section>
+
+            <footer>
+                © <strong>Digital Liberation War Museum</strong> — Honoring 1971
+            </footer>
+        </main>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js for Poll Results -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Core site JS -->
+    <script src="../../shared/core.js"></script>
+    <!-- Page-specific JS -->
+    <script src="engagement.js"></script>
+</body>
+
+</html>
