@@ -43,7 +43,7 @@ function generateTimelineEvents() {
       ],
       casualties: null,
       significance: 'high',
-      image: 'https://picsum.photos/600/400?random=1',
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjcaGm_vQ8kNQfJXpvVHhyx8r2ISJQGSJHzQ&s',
       relatedEvents: [2, 5]
     },
     {
@@ -61,7 +61,7 @@ function generateTimelineEvents() {
       ],
       casualties: null,
       significance: 'medium',
-      image: 'https://picsum.photos/600/400?random=2',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/e/e4/1952_Bengali_Language_movement.jpg',
       relatedEvents: [1, 3]
     },
     {
@@ -79,7 +79,7 @@ function generateTimelineEvents() {
       ],
       casualties: null,
       significance: 'high',
-      image: 'https://picsum.photos/600/400?random=3',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Mosharraf_and_daughters_attending_procession_with_Joy_Bangla_banner%2C_Jessore%2C_East_Pakistan_%281971%29.jpg/1200px-Mosharraf_and_daughters_attending_procession_with_Joy_Bangla_banner%2C_Jessore%2C_East_Pakistan_%281971%29.jpg',
       relatedEvents: [2, 4]
     },
     {
@@ -97,7 +97,7 @@ function generateTimelineEvents() {
       ],
       casualties: null,
       significance: 'highest',
-      image: 'https://picsum.photos/600/400?random=4',
+      image: 'https://www.tbsnews.net/sites/default/files/styles/big_3/public/images/2020/03/07/bangabandhu_7_march.jpg',
       relatedEvents: [3, 5]
     },
     {
@@ -115,7 +115,7 @@ function generateTimelineEvents() {
       ],
       casualties: 'Thousands killed',
       significance: 'highest',
-      image: 'https://picsum.photos/600/400?random=5',
+      image: 'https://upload.wikimedia.org/wikipedia/en/thumb/2/2e/Dead_bodies_of_Bengali_intellectuals%2C_14_December_1971.jpg/250px-Dead_bodies_of_Bengali_intellectuals%2C_14_December_1971.jpg',
       relatedEvents: [4, 6]
     },
     {
@@ -133,7 +133,7 @@ function generateTimelineEvents() {
       ],
       casualties: null,
       significance: 'highest',
-      image: 'https://picsum.photos/600/400?random=6',
+      image: 'https://liberationwar.org/wp-content/uploads/2021/03/IMG-20210322-WA0007.jpg',
       relatedEvents: [5, 7]
     },
     {

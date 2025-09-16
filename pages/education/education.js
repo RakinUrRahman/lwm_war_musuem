@@ -88,7 +88,7 @@ function generateCourses() {
                 duration: '45 min',
                 lessons: 8,
                 completed: 0,
-                thumbnail: 'https://picsum.photos/400/200?random=101',
+                thumbnail: 'https://upload.wikimedia.org/wikipedia/commons/f/f4/BangladeshLiberationWarMontage.jpg',
                 type: 'interactive'
             },
             {
@@ -99,7 +99,7 @@ function generateCourses() {
                 duration: '1.5 hours',
                 lessons: 12,
                 completed: 0,
-                thumbnail: 'https://picsum.photos/400/200?random=102',
+                thumbnail: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3dN1GHE6IZJuO6X3sLVL3U3RerovuF335JQ&s',
                 type: 'interactive'
             },
             {
@@ -110,7 +110,7 @@ function generateCourses() {
                 duration: '1 hour',
                 lessons: 10,
                 completed: 0,
-                thumbnail: 'https://picsum.photos/400/200?random=103',
+                thumbnail: 'https://www.aljazeera.com/wp-content/uploads/2011/05/201159102630674734_20.jpeg?resize=1200%2C675',
                 type: 'interactive'
             },
             {
@@ -121,7 +121,7 @@ function generateCourses() {
                 duration: '2 hours',
                 lessons: 15,
                 completed: 0,
-                thumbnail: 'https://picsum.photos/400/200?random=104',
+                thumbnail: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHHXQcKNVSjn5DOzU6qRlcQNjlY9ZRDo-xeQ&s',
                 type: 'interactive'
             }
         ],
@@ -134,7 +134,7 @@ function generateCourses() {
                 duration: '3 hours',
                 lessons: 20,
                 completed: 0,
-                thumbnail: 'https://picsum.photos/400/200?random=201',
+                thumbnail: 'https://i.ytimg.com/vi/RRACPOW2tns/maxresdefault.jpg',
                 type: 'video'
             },
             {

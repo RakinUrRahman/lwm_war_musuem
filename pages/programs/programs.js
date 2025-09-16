@@ -27,6 +27,19 @@ function loadProgramsData() {
 
 // Generate sample programs data
 function generateProgramsData() {
+  // Predefined image URLs for programs
+  const programImages = [
+    '../media/uploads/artifacts/1756579360_download (3).jpeg',
+    '../media/uploads/artifacts/1756724716_WhatsApp Image 2025-09-01 at 16.50.11_7a72ed69.jpg',
+    '../media/uploads/artifacts/1756725024_images (1).jpeg',
+    '../media/uploads/artifacts/Human_Remains.jpg',
+    '../media/uploads/artifacts/OIP.webp',
+    '../media/uploads/artifacts/OLC.webp',
+    '../media/uploads/artifacts/th.jpg',
+    '../media/uploads/thumbnails/1756587899_thumb_download1.jpeg',
+    '../media/uploads/thumbnails/1756590463_thumb_Screenshot 2025-08-31 034235.png'
+  ];
+
   const programCategories = [
     'workshops',
     'seminars', 
@@ -163,7 +176,7 @@ function generateProgramsData() {
           endTime: `${11 + Math.floor(Math.random() * 6)}:00`,
           instructor: `Dr. ${['Rahman', 'Ahmed', 'Khan', 'Begum', 'Hasan'][Math.floor(Math.random() * 5)]}`,
           location: ['Main Auditorium', 'Conference Room A', 'Gallery 1', 'Workshop Room', 'Exhibition Hall'][Math.floor(Math.random() * 5)],
-          image: `https://picsum.photos/400/300?random=${id}`,
+          image: programImages[(id - 1) % programImages.length],
           featured: index === 0 && session === 1,
           enrolled: Math.floor(Math.random() * template.capacity * 0.8),
           schedule: [

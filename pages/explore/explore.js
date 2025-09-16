@@ -176,6 +176,19 @@ function generateMuseumAreas() {
 
 // Generate collections data
 function generateCollectionsData() {
+  // Predefined image URLs for collections
+  const collectionImages = [
+    '../media/uploads/artifacts/1756579360_download (3).jpeg',
+    '../media/uploads/artifacts/1756724716_WhatsApp Image 2025-09-01 at 16.50.11_7a72ed69.jpg',
+    '../media/uploads/artifacts/1756725024_images (1).jpeg',
+    '../media/uploads/artifacts/Human_Remains.jpg',
+    '../media/uploads/artifacts/OIP.webp',
+    '../media/uploads/artifacts/OLC.webp',
+    '../media/uploads/artifacts/th.jpg',
+    '../media/uploads/thumbnails/1756587899_thumb_download1.jpeg',
+    '../media/uploads/thumbnails/1756590463_thumb_Screenshot 2025-08-31 034235.png'
+  ];
+
   const collections = [];
   let id = 1;
 
@@ -231,7 +244,7 @@ function generateCollectionsData() {
         condition: ['Excellent', 'Good', 'Fair'][Math.floor(Math.random() * 3)],
         dimensions: `${20 + Math.floor(Math.random() * 50)}cm x ${15 + Math.floor(Math.random() * 30)}cm`,
         material: getRandomMaterial(category.type),
-        image: `https://picsum.photos/300/400?random=${id}`,
+        image: collectionImages[(id - 1) % collectionImages.length],
         featured: index < 2,
         gallery: getRandomGallery(),
         donatedBy: Math.random() > 0.5 ? `${['Mr.', 'Mrs.', 'Dr.'][Math.floor(Math.random() * 3)]} ${['Rahman', 'Ahmed', 'Khan', 'Begum', 'Hasan'][Math.floor(Math.random() * 5)]}` : 'Anonymous'
@@ -363,7 +376,7 @@ function renderGalleryHighlights() {
     {
       name: 'Pre-Independence Gallery',
       description: 'Historical context leading to the Liberation War',
-      image: 'https://picsum.photos/400/300?random=gallery1',
+      image: 'https://i.guim.co.uk/img/static/sys-images/Guardian/Pix/pictures/2008/04/10/bangladesh460x276.jpg?width=465&dpr=1&s=none&crop=none',
       artifacts: 126,
       area: '450 sq ft',
       highlights: ['Colonial Period', 'Language Movement', 'Political Awakening']
@@ -371,7 +384,7 @@ function renderGalleryHighlights() {
     {
       name: 'War Gallery',
       description: 'Main exhibition of the nine-month Liberation War',
-      image: 'https://picsum.photos/400/300?random=gallery2',
+      image: 'https://tds-images.thedailystar.net/sites/default/files/styles/big_202/public/news/images/re-visiting_the_liberation_war_museum2.jpg',
       artifacts: 248,
       area: '650 sq ft',
       highlights: ['Battle Scenes', 'Military Equipment', 'Freedom Fighters']
@@ -379,7 +392,7 @@ function renderGalleryHighlights() {
     {
       name: 'Heroes Gallery',
       description: 'Dedicated to brave freedom fighters and martyrs',
-      image: 'https://picsum.photos/400/300?random=gallery3',
+      image: 'https://tds-images.thedailystar.net/sites/default/files/styles/very_big_201/public/images/2022/12/15/mukti-bahini-real-heroes.jpg',
       artifacts: 189,
       area: '500 sq ft',
       highlights: ['Personal Stories', 'Portraits', 'Memorabilia']
