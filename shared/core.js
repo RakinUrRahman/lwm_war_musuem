@@ -73,6 +73,30 @@ const TRANSLATIONS = {
   'home.timeline.1952': { en: 'Language Movement', bn: 'ভাষা আন্দোলন' },
   'home.timeline.1971': { en: 'Liberation War', bn: 'মুক্তিযুদ্ধ' },
   'home.timeline.2025': { en: 'Digital Heritage', bn: 'ডিজিটাল ঐতিহ্য' },
+  // Map page
+  'map.title': { en: 'Map of Memory', bn: 'স্মৃতির মানচিত্র' },
+  'map.subtitle': { en: 'Explore interactive floors, exhibits, and facilities that tell the story of the Liberation War.', bn: 'মুক্তিযুদ্ধের গল্প বলা ইন্টারঅ্যাকটিভ ফ্লোর, প্রদর্শনী ও সুবিধাসমূহ অন্বেষণ করুন।' },
+  'map.interactiveTitle': { en: 'Interactive Museum Map', bn: 'ইন্টারঅ্যাকটিভ জাদুঘর মানচিত্র' },
+  'map.floor.ground': { en: 'Ground Floor', bn: 'ভূমিতল' },
+  'map.floor.first': { en: 'First Floor', bn: 'প্রথম তলা' },
+  'map.floor.second': { en: 'Second Floor', bn: 'দ্বিতীয় তলা' },
+  'map.legend.title': { en: 'Legend', bn: 'লেজেন্ড' },
+  'map.legend.exhibition': { en: 'Exhibition Halls', bn: 'প্রদর্শনী হল' },
+  'map.legend.interactive': { en: 'Interactive Zones', bn: 'ইন্টারঅ্যাকটিভ জোন' },
+  'map.legend.facility': { en: 'Facilities', bn: 'সুবিধাসমূহ' },
+  'map.legend.restricted': { en: 'Staff Areas', bn: 'কর্মী এলাকা' },
+  // Map stats & filters (new creative UI)
+  'map.stat.areas': { en: 'Total Areas', bn: 'মোট এলাকা' },
+  'map.stat.exhibits': { en: 'Exhibits', bn: 'প্রদর্শনী' },
+  'map.stat.interactive': { en: 'Interactive Zones', bn: 'ইন্টারঅ্যাকটিভ জোন' },
+  'map.stat.facilities': { en: 'Facilities', bn: 'সুবিধাসমূহ' },
+  'map.filter.all': { en: 'All', bn: 'সব' },
+  'map.filter.exhibition': { en: 'Exhibits', bn: 'প্রদর্শনী' },
+  'map.filter.interactive': { en: 'Interactive', bn: 'ইন্টারঅ্যাকটিভ' },
+  'map.filter.facility': { en: 'Facilities', bn: 'সুবিধাসমূহ' },
+  'map.filter.restricted': { en: 'Staff', bn: 'স্টাফ' },
+  'map.search.placeholder': { en: 'Search areas...', bn: 'এলাকা খুঁজুন...' },
+  'map.info.placeholder': { en: 'Select an area pin to explore its details.', bn: 'বিস্তারিত দেখতে একটি এলাকা পিন নির্বাচন করুন।' },
 };
 
 // ===== Global Deep Translation Engine =====
