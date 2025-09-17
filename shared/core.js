@@ -1,5 +1,6 @@
 // Shared core functionality for Liberation War Museum
 // === Language and Dark Mode ===
+// Added external JSON translation loader + missing phrase collector (2025-09-17)
 const LANG = {
   en: {
     dark: 'Dark Mode',
@@ -74,10 +75,246 @@ const TRANSLATIONS = {
   'home.timeline.2025': { en: 'Digital Heritage', bn: 'ডিজিটাল ঐতিহ্য' },
 };
 
-function setLang(lang) {
+// ===== Global Deep Translation Engine =====
+// A fallback dictionary for free text (non-marked) phrases.
+const GLOBAL_LEXICON = {
+  en: {}, // identity
+  bn: {
+    'Home': 'হোম',
+    'News & Updates': 'সংবাদ ও আপডেট',
+    'Programs & Events': 'প্রোগ্রাম ও ইভেন্ট',
+    'Media Library': 'মিডিয়া লাইব্রেরি',
+    'Citizen Stories': 'নাগরিকদের গল্প',
+    'Memorial Wall': 'স্মারক দেয়াল',
+    'Map of Memory': 'স্মৃতির মানচিত্র',
+    'Explore Artifacts': 'আর্টিফ্যাক্টস অনুসন্ধান',
+    'Historical Timeline': 'ঐতিহাসিক টাইমলাইন',
+    'Virtual Tour': 'ভার্চুয়াল ট্যুর',
+    'Education Center': 'শিক্ষা কেন্দ্র',
+    'Digital Archive': 'ডিজিটাল আর্কাইভ',
+    'Book a Visit': 'ভ্রমণ বুকিং',
+    'Login / Register': 'লগইন / রেজিস্টার',
+    'Logout': 'লগআউট',
+    'My Profile': 'আমার প্রোফাইল',
+    'My Favorites': 'আমার পছন্দসমূহ',
+    'Manager Dashboard': 'ম্যানেজার ড্যাশবোর্ড',
+    'Committee Management': 'কমিটি ব্যবস্থাপনা',
+    'Artifact Donations': 'আর্টিফ্যাক্ট দান',
+    'Search': 'খুঁজুন',
+    'High Contrast': 'উচ্চ কনট্রাস্ট',
+    'Text Size': 'টেক্সট সাইজ',
+    'Dark Mode': 'ডার্ক মোড',
+    'Light Mode': 'লাইট মোড',
+    'Public Visitor': 'সাধারণ দর্শক',
+    'View': 'দেখুন',
+    'Play': 'চালান',
+    'Read More': 'আরও পড়ুন',
+    'Details & Registration': 'বিস্তারিত ও নিবন্ধন',
+    'Read Story': 'গল্প পড়ুন',
+    'Learn More': 'আরও জানুন',
+    'Artifacts': 'আর্টিফ্যাক্টস',
+    'Stories': 'গল্প',
+    'Events': 'ইভেন্ট',
+    'Visitors': 'দর্শক',
+    'Featured Programs': 'বৈশিষ্ট্যযুক্ত প্রোগ্রাম',
+    'All Programs': 'সব প্রোগ্রাম',
+    'Workshops': 'ওয়ার্কশপ',
+    'Seminars': 'সেমিনার',
+    'Exhibitions': 'প্রদর্শনী',
+    'Conferences': 'কনফারেন্স',
+    'Guided Tours': 'গাইডেড ট্যুর',
+    'Education Center': 'শিক্ষা কেন্দ্র',
+    'Learning Paths': 'লার্নিং পাথ',
+    'Courses & Lessons': 'কোর্স ও পাঠ্য',
+  }
+};
+
+// ===== External Translation Loader Support =====
+// Expected JSON structure at /translations/<lang>.json :
+// { "lexicon": { "Phrase": "Translation", ... }, "keys": { "brand.title": "..." } }
+const _EXTERNAL_TRANSLATIONS_CACHE = { loaded: {} };
+async function loadExternalTranslations(lang) {
+  if (!lang) return;
+  if (_EXTERNAL_TRANSLATIONS_CACHE.loaded[lang]) return; // already merged
+  // Compute relative path: pages/<page>/<page>.html includes ../../shared/core.js so ../../translations/<lang>.json works
+  const url = `../../translations/${lang}.json`;
+  try {
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    // Merge lexicon phrases
+    if (json.lexicon) {
+      Object.entries(json.lexicon).forEach(([phrase, translated]) => {
+        GLOBAL_LEXICON[lang] = GLOBAL_LEXICON[lang] || {};
+        if (!GLOBAL_LEXICON[lang][phrase]) {
+          GLOBAL_LEXICON[lang][phrase] = translated;
+        }
+      });
+    }
+    // Merge optional lexicon_additions (our staged new phrases before consolidation)
+    if (json.lexicon_additions) {
+      Object.entries(json.lexicon_additions).forEach(([phrase, translated]) => {
+        GLOBAL_LEXICON[lang] = GLOBAL_LEXICON[lang] || {};
+        if (!GLOBAL_LEXICON[lang][phrase]) {
+          GLOBAL_LEXICON[lang][phrase] = translated;
+        }
+      });
+    }
+    // Merge key-based translations into TRANSLATIONS
+    if (json.keys) {
+      Object.entries(json.keys).forEach(([k, v]) => {
+        TRANSLATIONS[k] = TRANSLATIONS[k] || { en: k };
+        TRANSLATIONS[k][lang] = v;
+      });
+    }
+
+    // Auto-merge translations/missing.json if exists (one-time enrichment) — silent best-effort
+    if (lang === 'bn') {
+      try {
+        const missingUrl = `../../translations/missing.json`;
+        const missRes = await fetch(missingUrl, { cache: 'no-store' });
+        if (missRes.ok) {
+          const missJson = await missRes.json();
+          if (missJson.lexicon) {
+            Object.entries(missJson.lexicon).forEach(([phrase, translated]) => {
+              if (!translated) return; // skip empty to avoid polluting
+              GLOBAL_LEXICON[lang] = GLOBAL_LEXICON[lang] || {};
+              if (!GLOBAL_LEXICON[lang][phrase]) GLOBAL_LEXICON[lang][phrase] = translated;
+            });
+            console.log('[LWM] Merged missing.json into bn lexicon');
+          }
+        }
+      } catch (mergeErr) {
+        console.info('[LWM] Optional missing.json merge skipped:', mergeErr.message);
+      }
+    }
+    _EXTERNAL_TRANSLATIONS_CACHE.loaded[lang] = true;
+    console.log('[LWM] External translations loaded for', lang);
+  } catch (e) {
+    // Fallback: mark as loaded to avoid repeated fetch attempts and continue with embedded dictionaries
+    _EXTERNAL_TRANSLATIONS_CACHE.loaded[lang] = 'failed';
+    console.warn('[LWM] Failed to load external translations for', lang, e, '— using embedded translations only.');
+  }
+}
+
+// Developer utility to export the currently collected missing phrases (from collectMissingTranslations)
+// Creates a downloadable JSON (translations/missing.json structure) in-browser.
+function exportMissingTranslations() {
+  const missing = window._LWM_MISSING_TRANSLATIONS || collectMissingTranslations();
+  const payload = { lexicon: missing };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'missing.json';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=> { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  console.log('[LWM] missing.json download triggered (populate Bangla translations and move to /translations).');
+}
+window.exportMissingTranslations = exportMissingTranslations;
+
+// Utility dev helper to collect missing phrases from current DOM for English baseline
+// Usage: window._LWM.collectMissingTranslations()
+function collectMissingTranslations(options = {}) {
+  const {
+    includeLong = false, // if true, allow longer paragraphs
+    maxWords = 18,       // default cap for words unless includeLong
+    longMaxWords = 60    // hard cap even when includeLong
+  } = options;
+  const missing = {};
+  const seen = new Set();
+  const nodes = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode(n) {
+      if (!n.parentElement) return NodeFilter.FILTER_REJECT;
+      if (n.parentElement.closest('script,style,code,pre,textarea,svg')) return NodeFilter.FILTER_REJECT;
+      const txt = n.nodeValue && n.nodeValue.trim();
+      if (!txt) return NodeFilter.FILTER_REJECT;
+      if (txt.length < 2) return NodeFilter.FILTER_REJECT;
+      // Skip if key-based translation already (data-i18n ancestor)
+      if (n.parentElement.closest('[data-i18n]')) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  while (nodes.nextNode()) {
+    const raw = nodes.currentNode.nodeValue.trim();
+    if (seen.has(raw)) continue;
+    seen.add(raw);
+    // Skip if phrase already in lexicon for BN (source corpus)
+    if (GLOBAL_LEXICON.bn && GLOBAL_LEXICON.bn[raw]) continue;
+    // Skip if appears to be dynamic numeric only
+    if (/^\d+[+%]?$/.test(raw)) continue;
+    const wordCount = raw.split(/\s+/).length;
+    if (!includeLong && wordCount > maxWords) continue;
+    if (includeLong && wordCount > longMaxWords) continue;
+    missing[raw] = '';
+  }
+  console.log('[LWM] Missing translation phrases draft:', missing);
+  window._LWM_MISSING_TRANSLATIONS = missing;
+  return missing;
+}
+window.collectMissingTranslations = collectMissingTranslations;
+
+// Page-specific registration API
+const PAGE_TRANSLATIONS = {}; // key -> { en, bn }
+function registerPageTranslations(obj) {
+  Object.keys(obj || {}).forEach(k => {
+    PAGE_TRANSLATIONS[k] = PAGE_TRANSLATIONS[k] || {};
+    PAGE_TRANSLATIONS[k].en = obj[k].en || PAGE_TRANSLATIONS[k].en || '';
+    PAGE_TRANSLATIONS[k].bn = obj[k].bn || PAGE_TRANSLATIONS[k].bn || '';
+  });
+}
+window.registerPageTranslations = registerPageTranslations;
+
+// Utility to translate a single phrase using precedence: explicit key (data-i18n) -> TRANSLATIONS -> PAGE_TRANSLATIONS -> GLOBAL_LEXICON
+function translatePhrase(phrase, lang) {
+  if (!phrase || typeof phrase !== 'string') return phrase;
+  const trimmed = phrase.trim();
+  // Exact match in lexicon
+  if (GLOBAL_LEXICON[lang] && GLOBAL_LEXICON[lang][trimmed]) return GLOBAL_LEXICON[lang][trimmed];
+  return phrase; // fallback as-is
+}
+
+// Deep DOM translation: finds visible text nodes not already marked and replaces using lexicon (non-destructive storage of original text in data-orig)
+function deepTranslate(root = document.body) {
+  if (!root) return;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      if (!node.parentElement) return NodeFilter.FILTER_REJECT;
+      const p = node.parentElement;
+      if (p.closest('script,style,code,pre,textarea,svg')) return NodeFilter.FILTER_REJECT;
+      const text = node.nodeValue;
+      if (!text || !text.trim()) return NodeFilter.FILTER_REJECT;
+      // Skip if ancestor has data-i18n (already handled) or if inside an input value
+      if (p.hasAttribute('data-i18n') || p.closest('[data-i18n]')) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  const lang = currentLang;
+  const toUpdate = [];
+  while (walker.nextNode()) { toUpdate.push(walker.currentNode); }
+  toUpdate.forEach(node => {
+    const original = node.parentElement.getAttribute('data-orig-text') || node.nodeValue;
+    node.parentElement.setAttribute('data-orig-text', original);
+    if (lang === 'en') {
+      node.nodeValue = original; // restore
+    } else if (lang === 'bn') {
+      node.nodeValue = translatePhrase(original, 'bn');
+    }
+  });
+}
+
+async function setLang(lang) {
+  // Load external resources first (if available)
+  await loadExternalTranslations(lang);
   currentLang = lang;
   localStorage.setItem('lwm_lang', lang);
   updateLangUI();
+  // Rebuild mega menu for updated labels
+  const existing = document.querySelector('header.primary-nav');
+  if (existing) existing.remove();
+  buildMegaMenu();
+  // Deep translate after rebuild ensuring external merges applied
+  setTimeout(()=> deepTranslate(), 30);
 }
 
 function updateLangUI() {
@@ -125,6 +362,8 @@ function updateLangUI() {
 
   // Re-render menu for language changes
   renderMenu();
+  // Deep translate any remaining text
+  deepTranslate();
 }
 
 // === Sidebar Toggle (robust, reusable) ===
@@ -186,11 +425,280 @@ const MENU_ITEMS = [
 // Expose menu items globally to avoid load-order/scoping issues
 window.MENU_ITEMS = MENU_ITEMS;
 
+// ====== NEW MEGA MENU CONFIGURATION (Top Horizontal Navigation) ======
+// Each top-level group contains a key, label, optional subtitle, and a list of child links.
+const MEGA_MENU_GROUPS = [
+  {
+    key: 'explore',
+    label: 'Explore',
+    sub: 'Reach the Mass People',
+    links: [
+      { page: 'home', label: 'Home', icon: 'fas fa-home' },
+      { page: 'login', label: 'Login / Register', icon: 'fas fa-user' },
+      { page: 'virtual-tour', label: 'Virtual Tour', icon: 'fas fa-vr-cardboard' },
+      { page: 'ticket', label: 'Book a Visit', icon: 'fas fa-ticket-alt' },
+      { page: 'explore', label: 'Explore Artifacts', icon: 'fas fa-archive' },
+      { page: 'map', label: 'Map of Memory', icon: 'fas fa-map-marked-alt' },
+      { page: 'search', label: 'Search (Global)', icon: 'fas fa-search', action: () => document.getElementById('globalSearch')?.focus() },
+    ]
+  },
+  {
+    key: 'awareness',
+    label: 'Awareness',
+    sub: 'Creation & Dissemination',
+    links: [
+      { page: 'news', label: 'News & Updates', icon: 'fas fa-newspaper' },
+      { page: 'programs', label: 'Programs & Events', icon: 'fas fa-calendar-alt' },
+      { page: 'media', label: 'Media Library', icon: 'fas fa-photo-video' },
+      { page: 'community', label: 'Social Connect', icon: 'fas fa-hashtag' },
+      { page: 'stories', label: 'Citizen Stories', icon: 'fas fa-book-open' },
+      { page: 'engagement', label: 'Engagement & Students', icon: 'fas fa-user-graduate' },
+    ]
+  },
+  {
+    key: 'engage',
+    label: 'Engage',
+    sub: 'Societal Participation',
+    links: [
+      { page: 'stories', label: 'Citizen Stories', icon: 'fas fa-book-open' },
+      { page: 'map', label: 'Map of Memory', icon: 'fas fa-map-marked-alt' },
+      { page: 'memorial', label: 'Memorial Wall', icon: 'fas fa-monument' },
+      { page: 'community', label: 'Community Programs', icon: 'fas fa-people-group' },
+      { page: 'donations', label: 'Support & Share', icon: 'fas fa-donate', roles: ['manager','admin'] },
+      { page: 'favorites', label: 'My Favorites', icon: 'fas fa-heart', roles: ['user','manager','admin'] },
+    ]
+  },
+  {
+    key: 'education',
+    label: 'Education',
+    sub: 'Learn & Research',
+    links: [
+      { page: 'education', label: 'Education Center', icon: 'fas fa-graduation-cap' },
+      { page: 'timeline', label: 'Historical Timeline', icon: 'fas fa-history' },
+      { page: 'explore', label: 'Explore Artifacts', icon: 'fas fa-archive' },
+      { page: 'virtual-tour', label: 'Immersive Tour', icon: 'fas fa-vr-cardboard' },
+      { page: 'archive', label: 'Digital Archive', icon: 'fas fa-database' },
+      { page: 'media', label: 'Media Archive', icon: 'fas fa-folder-open' },
+    ]
+  },
+  {
+    key: 'archives',
+    label: 'Archives',
+    sub: 'Preserve History',
+    links: [
+      { page: 'archive', label: 'Digital Archive', icon: 'fas fa-database' },
+      { page: 'explore', label: 'Explore Collections', icon: 'fas fa-boxes-stacked' },
+      { page: 'media', label: 'Media Archive', icon: 'fas fa-film' },
+      { page: 'committee', label: 'Committee', icon: 'fas fa-users', roles:['manager','admin'] },
+      { page: 'manager', label: 'Manager Dashboard', icon: 'fas fa-tachometer-alt', roles:['manager','admin'] },
+      { page: 'profile', label: 'My Profile', icon: 'fas fa-user-circle', roles:['user','manager','admin'] },
+    ]
+  }
+];
+window.MEGA_MENU_GROUPS = MEGA_MENU_GROUPS;
+
+function buildMegaMenu() {
+  // Remove existing header if any
+  if (document.querySelector('header.primary-nav')) return; // already built
+  const main = document.querySelector('.main');
+  if (!main) return;
+  const role = state.user ? state.user.role : 'visitor';
+
+  const header = document.createElement('header');
+  header.className = 'primary-nav';
+  header.innerHTML = `
+    <div class="nav-inner">
+      <div class="brand-inline" role="banner">
+        <div class="logo">LWM</div>
+        <div>
+          <h1 data-i18n="brand.title">Digital Liberation War Museum</h1>
+          <div class="muted" data-i18n="brand.subtitle">Honoring Bangladesh's History</div>
+        </div>
+      </div>
+      <ul class="mega-menu" role="menubar"></ul>
+      <div class="nav-right">
+        <div class="search" role="search">
+          <i class="fas fa-search" aria-hidden="true"></i>
+          <input id="globalSearch" placeholder="Search artifacts, stories, memorials..." aria-label="Search"/>
+          <button class="btn" id="searchBtn">Search</button>
+        </div>
+        <div class="lang-dark" style="display:flex; gap:8px; align-items:center;">
+          <button class="btn" id="darkModeToggle" style="font-size:12px; padding:6px 10px;" aria-pressed="false"><i class="fas fa-moon"></i> <span id="darkModeLabel">${document.body.classList.contains('dark-mode') ? LANG[currentLang].light : LANG[currentLang].dark}</span></button>
+          <select id="langSelect" class="btn" style="font-size:12px; padding:6px 10px;">
+            <option value="en" ${currentLang==='en'?'selected':''}>English</option>
+            <option value="bn" ${currentLang==='bn'?'selected':''}>বাংলা</option>
+          </select>
+          <button class="btn" id="userMenuBtn" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i></button>
+        </div>
+      </div>
+    </div>`;
+
+  // Insert before existing topbar if present else at top of .main
+  const topBar = main.querySelector('.topbar');
+  if (topBar) {
+    main.insertBefore(header, topBar);
+    // Hide legacy topbar (we preserve for potential fallback but not display)
+    topBar.style.display = 'none';
+  } else {
+    main.prepend(header);
+  }
+
+  const menuUL = header.querySelector('.mega-menu');
+  const currentPage = (window.location.pathname.split('/').pop() || '').replace('.html','');
+  MEGA_MENU_GROUPS.forEach((group, groupIndex) => {
+    const li = document.createElement('li');
+    li.setAttribute('role','none');
+    const btn = document.createElement('button');
+    btn.setAttribute('role','menuitem');
+    btn.setAttribute('aria-haspopup','true');
+    btn.setAttribute('aria-expanded','false');
+    const groupLabel = currentLang==='bn' ? (BN_MENU_LABELS[group.key] || group.label) : group.label;
+    const groupSub = currentLang==='bn' ? '' : (group.sub || ''); // optionally translate later
+    btn.innerHTML = `<span class="menu-label">${groupLabel}</span><span class="menu-sub">${groupSub}</span>`;
+    li.appendChild(btn);
+
+    const panel = document.createElement('div');
+    panel.className = 'dropdown-panel';
+    const grid = document.createElement('div');
+    grid.className = 'dropdown-grid';
+    panel.appendChild(grid);
+
+    let groupHasActive = false;
+    group.links.forEach((link, linkIndex) => {
+      if (link.roles && !link.roles.includes(role)) return;
+      const a = document.createElement(link.action ? 'button' : 'a');
+      a.className = link.action ? 'link-like-inline' : '';
+      if (!link.action) a.href = link.page === 'search' ? '#' : `../${link.page}/${link.page}.html`;
+      const linkLabel = currentLang==='bn' ? (BN_MENU_LABELS[link.page] || link.label) : link.label;
+      a.innerHTML = `<i class="${link.icon || 'fas fa-circle'}"></i><span>${linkLabel}</span>`;
+      const isActive = !link.action && link.page === currentPage;
+      if (isActive) {
+        a.classList.add('active-link');
+        groupHasActive = true;
+      }
+      if (link.action) {
+        a.type = 'button';
+        a.addEventListener('click', (e)=>{ e.preventDefault(); link.action(); });
+      } else {
+        a.addEventListener('click', ()=> { if (link.page !== 'search') navigate(link.page); });
+      }
+      grid.appendChild(a);
+    });
+
+    if (groupHasActive) {
+      btn.classList.add('active-group');
+      btn.setAttribute('aria-current','true');
+    }
+
+    li.appendChild(panel);
+    menuUL.appendChild(li);
+
+    // Accessibility / open state handling
+    btn.addEventListener('click', (e)=> {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!expanded));
+      if (window.innerWidth <= 1000) {
+        li.classList.toggle('open');
+      }
+    });
+
+    // Keyboard navigation for top-level buttons
+    btn.addEventListener('keydown', (e)=> {
+      const buttons = Array.from(header.querySelectorAll('.mega-menu > li > button'));
+      const idx = buttons.indexOf(btn);
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        const next = buttons[(idx+1)%buttons.length];
+        next.focus();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const prev = buttons[(idx-1+buttons.length)%buttons.length];
+        prev.focus();
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        btn.setAttribute('aria-expanded','true');
+        const firstLink = li.querySelector('.dropdown-grid a, .dropdown-grid button');
+        if (firstLink) firstLink.focus();
+      } else if (e.key === 'Escape') {
+        btn.setAttribute('aria-expanded','false');
+        btn.focus();
+      }
+    });
+
+    // Keyboard navigation inside panel
+    panel.addEventListener('keydown', (e)=> {
+      const interactive = Array.from(panel.querySelectorAll('a,button'));
+      const focusIndex = interactive.indexOf(document.activeElement);
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const next = interactive[(focusIndex+1)%interactive.length];
+        next.focus();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        const prev = interactive[(focusIndex-1+interactive.length)%interactive.length];
+        prev.focus();
+      } else if (e.key === 'Escape') {
+        const btnEl = li.querySelector('button[role="menuitem"]');
+        btnEl.setAttribute('aria-expanded','false');
+        btnEl.focus();
+      } else if (e.key === 'ArrowLeft') {
+        const buttons = Array.from(header.querySelectorAll('.mega-menu > li > button'));
+        const currentBtn = li.querySelector('button');
+        const idx = buttons.indexOf(currentBtn);
+        const prevBtn = buttons[(idx-1+buttons.length)%buttons.length];
+        prevBtn.focus();
+      } else if (e.key === 'ArrowRight') {
+        const buttons = Array.from(header.querySelectorAll('.mega-menu > li > button'));
+        const currentBtn = li.querySelector('button');
+        const idx = buttons.indexOf(currentBtn);
+        const nextBtn = buttons[(idx+1)%buttons.length];
+        nextBtn.focus();
+      }
+    });
+  });
+
+  // Close dropdown when clicking outside (desktop)
+  document.addEventListener('click', (e)=> {
+    if (!header.contains(e.target)) {
+      header.querySelectorAll('.mega-menu > li > button[aria-expanded="true"]').forEach(b=> b.setAttribute('aria-expanded','false'));
+    }
+  });
+
+  // Re-bind search + dark/lang after injecting new DOM
+  initializeSearchAndToggles();
+  applyDataI18n();
+  deepTranslate();
+}
+
+function initializeSearchAndToggles() {
+  const globalSearch = byId('globalSearch');
+  const searchBtn = byId('searchBtn');
+  if (globalSearch) {
+    globalSearch.addEventListener('keypress', e => { if (e.key==='Enter') performSearch(globalSearch.value.toLowerCase()); });
+  }
+  if (searchBtn) {
+    searchBtn.addEventListener('click', ()=> { const q = byId('globalSearch').value.toLowerCase(); performSearch(q); });
+  }
+  const langSelect = byId('langSelect');
+  if (langSelect) langSelect.addEventListener('change', e=> setLang(e.target.value));
+  const darkModeToggle = byId('darkModeToggle');
+  if (darkModeToggle && !darkModeToggle.dataset.bound) {
+    darkModeToggle.dataset.bound = '1';
+    darkModeToggle.addEventListener('click', ()=> {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('lwm_dark', document.body.classList.contains('dark-mode')?'1':'0');
+      const label = document.getElementById('darkModeLabel');
+      if (label) label.textContent = document.body.classList.contains('dark-mode') ? LANG[currentLang].light : LANG[currentLang].dark;
+    });
+  }
+}
+
 function renderMenu() {
   const nav = byId('nav')
   if (!nav) {
-    console.warn('[LWM] #nav container not found — skipping menu render')
-    return
+    // Fall back to building mega menu if sidebar doesn't exist (new design)
+    buildMegaMenu();
+    return;
   }
   nav.innerHTML = ''
   const role = state.user ? state.user.role : 'visitor'
@@ -431,17 +939,18 @@ function generateTimeline(n) {
 // === UI Component Functions ===
 function artifactCard(a) {
   const isFavorite = state.favorites.includes(a.id)
+  const t = (s)=> currentLang==='bn' ? translatePhrase(s,'bn') : s;
   return `
     <div class="card">
       <div class="artifact-img" style="background-image:url('${a.image}')"></div>
-      <h4>${a.title}</h4>
-      <div class="muted">${a.period} • ${a.origin}</div>
-      <p style="margin:8px 0;">${a.description}</p>
+      <h4>${t(a.title)}</h4>
+      <div class="muted">${a.period} • ${t(a.origin)}</div>
+      <p style="margin:8px 0;">${t(a.description)}</p>
       <div style="display:flex;gap:8px;">
         <button class="btn" style="flex:1;" onclick="viewArtifact(${a.id})">
-          <i class="fas fa-eye"></i> View
+          <i class="fas fa-eye"></i> ${t('View')}
         </button>
-        <button class="btn" onclick="toggleFav(${a.id})" aria-label="${isFavorite ? 'Remove from favorites' : 'Add to favorites'}">
+        <button class="btn" onclick="toggleFav(${a.id})" aria-label="${isFavorite ? t('Remove from favorites') : t('Add to favorites')}">
           <i class="${isFavorite ? 'fas' : 'far'} fa-heart" style="color: ${isFavorite ? 'var(--red)' : 'inherit'}"></i>
         </button>
       </div>
@@ -450,19 +959,20 @@ function artifactCard(a) {
 }
 
 function mediaCard(m) {
+  const t = (s)=> currentLang==='bn' ? translatePhrase(s,'bn') : s;
   return `
     <div class="card">
       <div style="height:160px;background-image:url(${m.thumb});background-size:cover;border-radius:8px;position:relative;">
         <div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.7);color:white;padding:4px 8px;border-radius:4px;font-size:12px;">
-          ${m.type}
+          ${t(m.type)}
         </div>
         <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent, rgba(0,0,0,0.7));color:white;padding:12px;">
-          <h4 style="color:white;margin:0;">${m.title}</h4>
+          <h4 style="color:white;margin:0;">${t(m.title)}</h4>
         </div>
       </div>
       <div style="margin-top:12px;">
         <button class="btn" style="width:100%;" onclick="playMedia('${m.id}')">
-          <i class="fas fa-play"></i> Play
+          <i class="fas fa-play"></i> ${t('Play')}
         </button>
       </div>
     </div>
@@ -470,62 +980,66 @@ function mediaCard(m) {
 }
 
 function newsCard(n) {
+  const t = (s)=> currentLang==='bn' ? translatePhrase(s,'bn') : s;
   return `
     <div class="card">
       <div class="artifact-img" style="background-image:url('${n.image}')"></div>
-      <h4>${n.title}</h4>
+      <h4>${t(n.title)}</h4>
       <div class="muted">${n.date}</div>
-      <p>${n.excerpt}</p>
+      <p>${t(n.excerpt)}</p>
       <button class="btn" onclick="readNews('${n.id}')">
-        <i class="fas fa-readme"></i> Read More
+        <i class="fas fa-readme"></i> ${t('Read More')}
       </button>
     </div>
   `
 }
 
 function eventCard(e) {
+  const t = (s)=> currentLang==='bn' ? translatePhrase(s,'bn') : s;
   return `
     <div class="card">
       <div class="artifact-img" style="background-image:url('${e.image}')"></div>
-      <h4>${e.title}</h4>
+      <h4>${t(e.title)}</h4>
       <div class="muted"><i class="far fa-calendar-alt"></i> ${e.date}</div>
       <div class="muted"><i class="far fa-clock"></i> ${e.time}</div>
-      <p>${e.description}</p>
+      <p>${t(e.description)}</p>
       <button class="btn" style="width:100%;" onclick="viewEvent('${e.id}')">
-        <i class="fas fa-info-circle"></i> Details & Registration
+        <i class="fas fa-info-circle"></i> ${t('Details & Registration')}
       </button>
     </div>
   `
 }
 
 function storyCard(s) {
+  const t = (v)=> currentLang==='bn' ? translatePhrase(v,'bn') : v;
   return `
     <div class="card">
-      <h4>${s.title}</h4>
-      <div class="muted">By ${s.author}</div>
-      <p>${s.excerpt}</p>
+      <h4>${t(s.title)}</h4>
+      <div class="muted">${t('By')} ${t(s.author)}</div>
+      <p>${t(s.excerpt)}</p>
       <button class="btn" onclick="readStory('${s.id}')">
-        <i class="fas fa-book-open"></i> Read Story
+        <i class="fas fa-book-open"></i> ${t('Read Story')}
       </button>
     </div>
   `
 }
 
 function memorialCard(m) {
+  const t = (s)=> currentLang==='bn' ? translatePhrase(s,'bn') : s;
   return `
     <div class="card">
       <div style="height:160px;background-image:url('${m.image}');background-size:cover;border-radius:8px;"></div>
-      <h4>${m.name}</h4>
-      <div class="muted">${m.role} • ${m.region}</div>
+      <h4>${t(m.name)}</h4>
+      <div class="muted">${t(m.role)} • ${t(m.region)}</div>
       <button class="btn" style="width:100%;margin-top:12px;" onclick="viewMemorial('${m.id}')">
-        <i class="fas fa-info-circle"></i> Learn More
+        <i class="fas fa-info-circle"></i> ${t('Learn More')}
       </button>
     </div>
   `
 }
 
 // === Core Initialization ===
-function initializeCore() {
+async function initializeCore() {
   console.log('initializeCore called');
 
   // Wait a bit for all elements to be ready
@@ -610,6 +1124,10 @@ function initializeCore() {
       const label = document.getElementById('darkModeLabel');
       if (label) label.textContent = document.body.classList.contains('dark-mode') ? LANG[currentLang].light : LANG[currentLang].dark;
       localStorage.setItem('lwm_dark', document.body.classList.contains('dark-mode') ? '1' : '0');
+      // Update any duplicated dark mode label (header might have been rebuilt)
+      document.querySelectorAll('#darkModeLabel').forEach(l=> {
+        l.textContent = document.body.classList.contains('dark-mode') ? LANG[currentLang].light : LANG[currentLang].dark;
+      });
     });
   }
 
@@ -624,9 +1142,11 @@ function initializeCore() {
     document.body.classList.add('dark-mode');
   }
 
-  // Initial render
-  renderMenu()
-  updateUserUI()
+  // Initial render and external translation preload
+  await loadExternalTranslations(currentLang);
+  renderMenu(); // Will auto switch to mega menu if sidebar omitted
+  buildMegaMenu();
+  updateUserUI();
 
   // Language and dark mode setup
   setTimeout(() => {
